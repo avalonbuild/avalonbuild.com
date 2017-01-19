@@ -1,0 +1,142 @@
+﻿//
+// Modules
+//
+
+@import "watercolor/modules/grid";
+
+//
+// Body
+//
+
+body {
+	position: relative;
+	background-color: #fff;
+	background-image: none;
+	background-repeat: repeat;
+	background-attachment: scroll;
+	background-position: center top;
+	background-size: auto;
+	background-origin: padding-box;
+	background-clip: border-box;
+}
+
+//
+// Container
+//
+
+.container {
+	@include container;
+
+}
+
+.grid {
+	@include grid;
+}
+
+//
+// Resets
+//
+
+body,
+#content,
+#footer {
+	margin: 0;
+	padding: 0;
+	text-align: left;
+	clear: both;
+}
+
+//
+// Header
+//
+
+#header {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	position: relative;
+	padding: $line-height * 4em 0 $line-height * 4em 0;
+	background-attachment: fixed;
+	background-color: $primary-color;
+	background-image: linear-gradient(
+      rgba(0, 0, 0, 0.3),
+      rgba(0, 0, 0, 0.3)
+    ),url("/images/background.jpg");
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+	color: #fff;
+	text-align: center;
+/*
+	&:after {
+		content: "";
+		position: absolute;
+		left: 50%;
+		bottom: $line-height * -2em;
+		margin-left: $line-height * -1em;
+		border-width: $line-height * 1em;
+		border-style: solid;
+		border-color: transparent;
+		border-top-color: $primary-color;
+	}
+*/
+	h1 {
+		font-size: 5em;
+		font-weight: 700;
+		line-height: 1.2;
+		letter-spacing: -2px;
+		text-shadow: 0 .1em .2em rgba(0,0,0,0.3);
+		color: inherit;
+	}
+
+	h1 small {
+		display: block;
+		font-size: .5em;
+		font-weight: 500;
+		letter-spacing: -1px;
+		text-shadow: 0 .05em .15em rgba(0,0,0,0.2);
+	}
+
+	p {
+		text-shadow: 0 .05em .15em rgba(0,0,0,0.2);
+	}
+
+	a {
+		color: #fff;
+		text-decoration: underline;
+
+		&:hover {
+			color: rgba(255,255,255,0.6);
+		}
+	}
+}
+
+//
+// Main
+//
+
+#main {
+	//@include clear-children;
+
+	section {
+		padding: $line-height * 2em 0;
+		border-bottom: 1px solid $border-color;
+		text-align: center;
+
+		&:last-child {
+			border: 0;
+		}
+	}
+}
+
+//
+// Footer
+//
+
+#footer {
+	padding: $line-height * 1em 0;
+	background-color: #f2f3f5;
+	text-align: center;
+	//@include clear-children;
+}

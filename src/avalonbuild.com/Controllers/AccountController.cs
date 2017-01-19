@@ -8,11 +8,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
-using WebApplication.Models;
-using WebApplication.Models.AccountViewModels;
-using WebApplication.Services;
+using avalonbuild.com.Models;
+using avalonbuild.com.Models.AccountViewModels;
+using avalonbuild.com.Services;
 
-namespace WebApplication.Controllers
+namespace avalonbuild.com.Controllers
 {
     [Authorize]
     public class AccountController : Controller

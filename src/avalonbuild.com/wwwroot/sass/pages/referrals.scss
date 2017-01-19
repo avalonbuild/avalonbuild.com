@@ -1,0 +1,48 @@
+﻿@import "site/settings";
+@import "watercolor/modules/grid";
+
+//
+// Referrals
+//
+
+#referrals {
+
+	ul {
+		list-style: none;
+		margin: $line-height * 1em 0;
+		padding: 0;
+		@include grid;
+	}
+
+	li {
+		margin: 0 0 $line-height * 1em 0;
+
+		@include column(4);
+
+        @include breakpoint(small) {
+            @include column(6);
+        }
+
+		@include breakpoint(medium) {
+            @include column(4);
+        }
+
+		@include breakpoint(large) {
+            @include column(6);
+        }
+
+		@include breakpoint(extra-large) {
+            @include column(8);
+        }
+	}
+
+	blockquote {
+		margin: 0;
+		text-align: justify;
+
+		cite {
+			font-weight: 400;
+			font-style: normal;
+		}
+	}
+}

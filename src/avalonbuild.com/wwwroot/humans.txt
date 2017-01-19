@@ -1,0 +1,13 @@
+﻿/* TEAM */
+developer: clint kolodziej
+site: http://clintkolodziej.com
+twitter: @clintkolodziej
+location: rockford, il
+
+/* SITE */
+standards: html, css, asp.net mvc 6
+components: jquery, dotnet core 1.0, asp.net mvc 6
+software: microsoft visual studio code
+
+/* CREDITS */
+hero image: cole patrick (https://unsplash.com/colepatrick - https://images.unsplash.com/uploads/14129863345840df499fc/0165574c?q=80&fm=jpg&s=8528680c9f60d537893fbdeae83b95a0)

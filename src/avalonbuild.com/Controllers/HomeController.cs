@@ -1,33 +1,23 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-namespace WebApplication.Controllers
+namespace avalonbuild.com.Controllers
 {
     public class HomeController : Controller
     {
+        [Route("/")]
         public IActionResult Index()
         {
             return View();
         }
 
-        public IActionResult About()
+        [Route("/referrals")]
+        public IActionResult Referrals()
         {
-            ViewData["Message"] = "Your application description page.";
-
             return View();
         }
 
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
-        }
-
-        public IActionResult Error()
+        [Route("/work")]
+        public IActionResult Work()
         {
             return View();
         }

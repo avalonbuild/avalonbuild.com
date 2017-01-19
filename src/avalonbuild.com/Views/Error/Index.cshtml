@@ -1,0 +1,11 @@
+@model avalonbuild.com.Models.Error
+
+@{
+    Layout = "_Error";
+    ViewBag.Title = Model.Status;
+}
+
+<h1>
+	@Model.Status
+	<small>@Model.Description</small>
+</h1>

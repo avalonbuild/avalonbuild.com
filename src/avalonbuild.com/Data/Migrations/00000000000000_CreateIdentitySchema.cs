@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace WebApplication.Data.Migrations
+namespace avalonbuild.com.Data.Migrations
 {
     public partial class CreateIdentitySchema : Migration
     {

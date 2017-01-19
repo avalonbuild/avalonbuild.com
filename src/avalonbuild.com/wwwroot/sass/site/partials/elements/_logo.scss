@@ -1,0 +1,40 @@
+﻿//
+// Modules
+//
+
+@import "watercolor/modules/grid";
+
+//
+// Logo
+//
+
+.logo {
+    display: block;
+    height: 89px;
+    width: 289px;
+
+    margin: 0 auto $line-height * 1em auto;
+    background-image: url(/images/logo/avalon-logo.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100%;
+
+    @include breakpoint(small) {
+        height: 100px;
+        width: 350px;
+    }
+
+    @include breakpoint(medium) {
+        height: 178px;
+        width: 578px;
+    }
+}
+
+#nav > .logo {
+	float: left;
+	height: 2.5em;
+	width: 2.5em;
+	margin: .5em 1em .5em 1em;
+	line-height: 3.5em;
+	vertical-align: middle;
+}

@@ -5,41 +5,50 @@ var gulp = require("gulp"),
     rimraf = require("rimraf"),
     concat = require("gulp-concat"),
     cssmin = require("gulp-cssmin"),
+    sass = require('gulp-sass'),
+    sourcemaps = require('gulp-sourcemaps'),
+    prefix = require('gulp-autoprefixer'),
     uglify = require("gulp-uglify");
 
 var webroot = "./wwwroot/";
 
 var paths = {
-    js: webroot + "js/**/*.js",
-    minJs: webroot + "js/**/*.min.js",
-    css: webroot + "css/**/*.css",
-    minCss: webroot + "css/**/*.min.css",
-    concatJsDest: webroot + "js/site.min.js",
-    concatCssDest: webroot + "css/site.min.css"
+    css: webroot + "css/",
+    sass: webroot + "sass/",
 };
 
-gulp.task("clean:js", function (cb) {
-    rimraf(paths.concatJsDest, cb);
-});
+var options = {
+    sass: {
+        parameters: {
+            outputStyle: "expanded",
+			includePaths: ["wwwroot/lib/", "wwwroot/sass/"]
+        },
+        error: function (err) {
+            console.error('Error!', err.message);
+        }
+    },
+};
 
 gulp.task("clean:css", function (cb) {
-    rimraf(paths.concatCssDest, cb);
+    rimraf(paths.css, cb);
 });
 
-gulp.task("clean", ["clean:js", "clean:css"]);
+gulp.task("clean", ["clean:css"]);
 
-gulp.task("min:js", function () {
-    return gulp.src([paths.js, "!" + paths.minJs], { base: "." })
-        .pipe(concat(paths.concatJsDest))
-        .pipe(uglify())
-        .pipe(gulp.dest("."));
-});
-
-gulp.task("min:css", function () {
-    return gulp.src([paths.css, "!" + paths.minCss])
-        .pipe(concat(paths.concatCssDest))
+gulp.task('build:sass', ['clean:css'], function () {
+	return gulp.src(paths.sass + "**/*.scss")
+		.pipe(sourcemaps.init())
+		.pipe(sass(options.sass.parameters).on('error', options.sass.error))
+		//.pipe(prefix())
         .pipe(cssmin())
-        .pipe(gulp.dest("."));
+		.pipe(sourcemaps.write())
+		.pipe(gulp.dest(paths.css));
 });
 
-gulp.task("min", ["min:js", "min:css"]);
+gulp.task('build', ['build:sass'], function () {});
+
+gulp.task('watch', function () {
+    gulp.watch(paths.sass + "**/*.scss", ['build:sass']);
+});
+
+

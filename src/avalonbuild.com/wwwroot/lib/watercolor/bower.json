@@ -1,0 +1,27 @@
+{
+  "name": "watercolor",
+  "version": "0.0.1",
+  "homepage": "http://watercolor.flamebug.com",
+  "description": "Watercolor is a website design framework to take the pain out of making great looking, semantic, responsive websites.",
+  "authors": [
+	  "Clint Kolodziej"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/flamebug/watercolor.git"
+  },
+  "keywords": [
+    "sass",
+    "scss",
+    "framework",
+    "grid",
+    "standardize",
+    "forms",
+    "tables",
+    "typography"
+  ],
+  "ignore": [
+    "**/.*"
+  ]
+}

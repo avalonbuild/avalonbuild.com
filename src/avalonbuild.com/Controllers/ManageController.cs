@@ -6,11 +6,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using WebApplication.Models;
-using WebApplication.Models.ManageViewModels;
-using WebApplication.Services;
+using avalonbuild.com.Models;
+using avalonbuild.com.Models.ManageViewModels;
+using avalonbuild.com.Services;
 
-namespace WebApplication.Controllers
+namespace avalonbuild.com.Controllers
 {
     [Authorize]
     public class ManageController : Controller

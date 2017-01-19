@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using WebApplication.Data;
-using WebApplication.Models;
-using WebApplication.Services;
+using avalonbuild.com.Data;
+using avalonbuild.com.Models;
+using avalonbuild.com.Services;
 
-namespace WebApplication
+namespace avalonbuild.com
 {
     public class Startup
     {
@@ -36,9 +36,13 @@ namespace WebApplication
 
         public IConfigurationRoot Configuration { get; }
 
+        public AppSettings AppSettings { get; } = new AppSettings();
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<AppSettings>(options => Configuration.GetSection("AppSettings").Bind(options));
+
             // Add framework services.
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
@@ -52,6 +56,8 @@ namespace WebApplication
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+
+            services.AddAntiforgery();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -68,8 +74,10 @@ namespace WebApplication
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/error");
             }
+
+            app.UseStatusCodePagesWithReExecute("/error/{0}");
 
             app.UseStaticFiles();
 
@@ -83,6 +91,7 @@ namespace WebApplication
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
         }
     }
 }

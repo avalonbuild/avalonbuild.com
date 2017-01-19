@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using WebApplication.Data;
+using avalonbuild.com.Data;
 
-namespace WebApplication.Data.Migrations
+namespace avalonbuild.com.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("00000000000000_CreateIdentitySchema")]
@@ -123,7 +123,7 @@ namespace WebApplication.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("WebApplication.Models.ApplicationUser", b =>
+            modelBuilder.Entity("avalonbuild.com.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id");
 
@@ -181,7 +181,7 @@ namespace WebApplication.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("WebApplication.Models.ApplicationUser")
+                    b.HasOne("avalonbuild.com.Models.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -189,7 +189,7 @@ namespace WebApplication.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("WebApplication.Models.ApplicationUser")
+                    b.HasOne("avalonbuild.com.Models.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -202,7 +202,7 @@ namespace WebApplication.Data.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("WebApplication.Models.ApplicationUser")
+                    b.HasOne("avalonbuild.com.Models.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
