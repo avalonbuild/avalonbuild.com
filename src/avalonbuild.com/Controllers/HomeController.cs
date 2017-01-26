@@ -21,5 +21,17 @@ namespace avalonbuild.com.Controllers
         {
             return View();
         }
+
+        [Route("/galleries")]
+        public IActionResult Galleries()
+        {
+            return View();
+        }
+
+        [Route("/gallery/{name}")]
+        public IActionResult Gallery(string name)
+        {
+            return View(name);
+        }
     }
 }
