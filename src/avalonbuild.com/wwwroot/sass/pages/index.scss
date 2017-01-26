@@ -21,8 +21,6 @@
 	}
 }
 
-
-
 @keyframes logointro {
     0% {
         opacity: 0;
@@ -51,45 +49,47 @@
 	bottom: 6em;
 	left: 50%;
 	z-index: 2;
-}
 
-#scroller span {
-	position: absolute;
-	top: 0;
-	left: 50%;
-	width: 46px;
-	height: 46px;
-	margin-left: -23px;
-	box-sizing: border-box;
-}
-#scroller span::after {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	content: '';
-	width: 16px;
-	height: 16px;
-	margin: -12px 0 0 -8px;
-	border-left: 2px solid #fff;
-	border-bottom: 2px solid #fff;
-	-webkit-transform: rotate(-45deg);
-	transform: rotate(-45deg);
-	box-sizing: border-box;
-}
-#scroller span::before {
-	position: absolute;
-	top: 0;
-	left: 0;
-	z-index: -1;
-	content: '';
-	width: 46px;
-	height: 46px;
-	background-color: rgba(255,255,255,.1);
-	box-shadow: 0 0 0 0 rgba(255,255,255,.1);
-	border-radius: 100%;
-	opacity: 0;
-	animation: scrollindicator 2s infinite;
-	box-sizing: border-box;
+	span {
+		position: absolute;
+		top: 0;
+		left: 50%;
+		width: 46px;
+		height: 46px;
+		margin-left: -23px;
+		box-sizing: border-box;
+
+		&::after {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			content: '';
+			width: 16px;
+			height: 16px;
+			margin: -12px 0 0 -8px;
+			border-left: 2px solid #fff;
+			border-bottom: 2px solid #fff;
+			-webkit-transform: rotate(-45deg);
+			transform: rotate(-45deg);
+			box-sizing: border-box;
+		}
+
+		&::before {
+			position: absolute;
+			top: 0;
+			left: 0;
+			z-index: -1;
+			content: '';
+			width: 46px;
+			height: 46px;
+			background-color: rgba(255,255,255,.1);
+			box-shadow: 0 0 0 0 rgba(255,255,255,.1);
+			border-radius: 100%;
+			opacity: 0;
+			animation: scrollindicator 2s infinite;
+			box-sizing: border-box;
+		}
+	}
 }
 
 @keyframes scrollindicator {
@@ -137,96 +137,6 @@
 
 	p {
 		text-align: justify;
-	}
-}
-
-//
-// Team
-//
-
-#team {
-	background-color: #f8fafc;
-
-	p {
-		text-align: justify;
-		@include column(4);
-
-        @include breakpoint(small) {
-            @include column(6);
-        }
-
-		@include breakpoint(medium) {
-			@include column($prefix: 1, $suffix: 1);
-        }
-
-		@include breakpoint(large) {
-            @include column($prefix: 1, $suffix: 1);
-        }
-
-		@include breakpoint(extra-large) {
-            @include column($prefix: 2, $suffix: 2);
-        }
-	}
-
-	ul {
-		list-style: none;
-		display: flex;
-		justify-content: center;
-	}
-
-	.bio {
-		margin: $line-height * 1em $line-height * 2em;
-
-		img {
-			width: 10em;
-			height: 10em;
-			border-radius: 50%;
-		}
-	}
-
-}
-
-//
-// Gallery
-//
-
-#gallery {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-
-	height: 80vh;
-	/*background-attachment: fixed;*/
-	background-color: $primary-color;
-	background-image: url("/images/gallery/c6.jpg");
-	background-position: center;
-	background-repeat: no-repeat;
-	background-size: cover;
-
-	animation-name: gallerycarousel;
-	animation-duration: 20s;
-	animation-iteration-count: infinite;
-	animation-delay: 2s;
-}
-
-@keyframes gallerycarousel {
-	0% {
-		background-image: url("/images/gallery/c6.jpg");
-	}
-	20% {
-		background-image: url("/images/gallery/b55.jpg");
-	}
-	40% {
-		background-image: url("/images/gallery/b38.jpg");
-	}
-	60% {
-		background-image: url("/images/gallery/b47.jpg");
-	}
-	80% {
-		background-image: url("/images/gallery/b25-1.jpg");
-	}
-	100% {
-		background-image: url("/images/gallery/c6.jpg");
 	}
 }
 
@@ -283,6 +193,50 @@
 }
 
 //
+// Gallery
+//
+
+#gallery {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	height: 85vh;
+	/*background-attachment: fixed;*/
+	background-color: $primary-color;
+	background-image: url("/images/gallery/c6.jpg");
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+
+	animation-name: gallerycarousel;
+	animation-duration: 20s;
+	animation-iteration-count: infinite;
+	animation-delay: 2s;
+}
+
+@keyframes gallerycarousel {
+	0% {
+		background-image: url("/images/gallery/c6.jpg");
+	}
+	20% {
+		background-image: url("/images/gallery/b55.jpg");
+	}
+	40% {
+		background-image: url("/images/gallery/b38.jpg");
+	}
+	60% {
+		background-image: url("/images/gallery/b47.jpg");
+	}
+	80% {
+		background-image: url("/images/gallery/b25-1.jpg");
+	}
+	100% {
+		background-image: url("/images/gallery/c6.jpg");
+	}
+}
+
+//
 // Referrals
 //
 
@@ -326,6 +280,74 @@
 			font-style: normal;
 		}
 	}
+}
+
+//
+// Team
+//
+
+#team {
+	background-color: #f8fafc;
+
+	p {
+		text-align: justify;
+		@include column(4);
+
+        @include breakpoint(small) {
+            @include column(6);
+        }
+
+		@include breakpoint(medium) {
+			@include column($prefix: 1, $suffix: 1);
+        }
+
+		@include breakpoint(large) {
+            @include column($prefix: 1, $suffix: 1);
+        }
+
+		@include breakpoint(extra-large) {
+            @include column($prefix: 2, $suffix: 2);
+        }
+	}
+
+	ul {
+		list-style: none;
+		padding: 0;
+
+		@include breakpoint(small) {
+            display: flex;
+			justify-content: center;
+        }
+	}
+
+	.bio {
+		margin: $line-height * 1em;
+
+		@include breakpoint(medium) {
+			margin: $line-height * 1em $line-height * 1.5em;
+		}
+
+		@include breakpoint(large) {
+			margin: $line-height * 1em $line-height * 2em;
+		}
+
+		img {
+			width: 10em;
+			height: 10em;
+			border-radius: 50%;
+
+			@include breakpoint(small) {
+				width: 8em;
+				height: 8em;
+			}
+
+			@include breakpoint(large) {
+				width: 10em;
+				height: 10em;
+			}
+		}
+	}
+
 }
 
 //

@@ -18,6 +18,10 @@ body {
 	background-size: auto;
 	background-origin: padding-box;
 	background-clip: border-box;
+
+	@include breakpoint(small) {
+		font-size: $body-font-size * 1.25em;
+	}
 }
 
 //
