@@ -10,14 +10,8 @@ namespace avalonbuild.com.Controllers
             return View();
         }
 
-        [Route("/referrals")]
-        public IActionResult Referrals()
-        {
-            return View();
-        }
-
-        [Route("/work")]
-        public IActionResult Work()
+        [Route("/services")]
+        public IActionResult Services()
         {
             return View();
         }
@@ -33,5 +27,12 @@ namespace avalonbuild.com.Controllers
         {
             return View(name);
         }
+
+        [Route("/referrals")]
+        public IActionResult Referrals()
+        {
+            return View();
+        }
+
     }
 }
