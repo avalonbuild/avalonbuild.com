@@ -264,31 +264,35 @@
 
 	<div class="container">
 
-		<header>
+		<div class="grid">
 
-			<h2>Contact Us</h2>
-			<p>Contact us to request a quote, or to find out more about the services we provide. We'd love to hear from you!  Feel free to check us out on <a href="https://twitter.com/avalonbuild">Twitter</a> or <a href="https://www.facebook.com/AvalonDesignBuild/">Facebook</a> if you would like to say hi.</p>
+			<header>
 
-		</header>
+				<h2>Contact Us</h2>
+				<p>Contact us to request a quote, or to find out more about the services we provide. We'd love to hear from you!  Feel free to check us out on <a href="https://twitter.com/avalonbuild">Twitter</a> or <a href="https://www.facebook.com/AvalonDesignBuild/">Facebook</a> if you would like to say hi.</p>
 
-        <form asp-antiforgery="true">
+			</header>
 
-            <div id="contact-notification" class="alert"></div>
+			<form asp-antiforgery="true">
 
-            <label asp-for="Name"></label>
-            <input asp-for="Name" type="text"/>
+				<div id="contact-notification" class="alert"></div>
 
-            <label asp-for="Email"></label>
-            <input asp-for="Email" type="email" />
+				<label asp-for="Name"></label>
+				<input asp-for="Name" type="text"/>
 
-            <label asp-for="Message"></label>
-            <textarea asp-for="Message" cols="55" rows="10"></textarea>
+				<label asp-for="Email"></label>
+				<input asp-for="Email" type="email" />
 
-            <p>
-                <button id="contact-submit">Send Message</button>
-            </p>
+				<label asp-for="Message"></label>
+				<textarea asp-for="Message" cols="55" rows="10"></textarea>
 
-        </form>
+				<p>
+					<button id="contact-submit">Send Message</button>
+				</p>
+
+			</form>
+
+		</div>
 
 	</div>
 

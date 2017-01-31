@@ -330,6 +330,18 @@
 
 #contact {
 
+	header, form {
+		@include column;
+
+		@include breakpoint(large) {
+            @include column($prefix: 1, $suffix: 1);
+        }
+
+		@include breakpoint(extra-large) {
+            @include column($prefix: 3, $suffix: 3);
+        }
+	}
+
 	h2 {
 		text-align: center;
 	}
