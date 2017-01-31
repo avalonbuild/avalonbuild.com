@@ -17,15 +17,7 @@
 	li {
 		margin: 0 0 $line-height * 1em 0;
 
-		@include column(4);
-
-        @include breakpoint(small) {
-            @include column(6);
-        }
-
-		@include breakpoint(medium) {
-            @include column(4);
-        }
+		@include column;
 
 		@include breakpoint(large) {
             @include column(6);
@@ -39,6 +31,14 @@
 	blockquote {
 		margin: 0;
 		text-align: justify;
+
+		@include breakpoint(large) {
+            margin: $line-height * .5em;
+        }
+
+		@include breakpoint(extra-large) {
+            margin: $line-height * 1em;
+        }
 
 		cite {
 			font-weight: 400;
