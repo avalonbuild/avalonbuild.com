@@ -1,4 +1,6 @@
-﻿@{
+﻿@model System.Collections.Generic.List<avalonbuild.com.Models.Galleries.Gallery>
+
+@{
     ViewBag.Title = "Galleries";
 	ViewBag.Description = "Galleries";
 }
@@ -17,69 +19,28 @@
 
 		</header>
 
-		<ul>
+		@if (Model.Count > 0)
+		{
+			<ul>
+				@foreach (var gallery in Model)
+				{
+					<li>
 
-			<li>
+						<a href="@gallery.Url">
 
-				<a href="/gallery/interiors">
+							<figure>
+								<img src="@Url.Content(@gallery.ImageUrl)" alt="@gallery.Name">
+								<figcaption>
+									<h3>@gallery.Name</h3>
+								</figcaption>
+							</figure>
 
-					<figure>
-						<img src="~/images/galleries/interiors.jpg" alt="Custom Homes">
-						<figcaption>
-							<h3>Interiors</h3>
-						</figcaption>
-					</figure>
+						</a>
 
-				</a>
-
-			</li>
-
-			<li>
-
-				<a href="/gallery/exteriors">
-
-					<figure>
-						<img src="~/images/galleries/exteriors.jpg" alt="Custom Homes">
-						<figcaption>
-							<h3>Exteriors</h3>
-						</figcaption>
-					</figure>
-
-				</a>
-
-			</li>
-
-			<li>
-
-				<a href="/gallery/details">
-
-					<figure>
-						<img src="~/images/galleries/details.jpg" alt="Custom Homes">
-						<figcaption>
-							<h3>Details</h3>
-						</figcaption>
-					</figure>
-
-				</a>
-
-			</li>
-
-			<li>
-
-				<a href="/gallery/before-and-after">
-
-					<figure>
-						<img src="~/images/galleries/before-and-after.jpg" alt="Custom Homes">
-						<figcaption>
-							<h3>Before And After</h3>
-						</figcaption>
-					</figure>
-
-				</a>
-
-			</li>
-		</ul>
-
+					</li>
+				}
+			</ul>
+		}
 	</div>
 
 </section>
