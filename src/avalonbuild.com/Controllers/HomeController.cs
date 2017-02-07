@@ -33,21 +33,22 @@ namespace avalonbuild.com.Controllers
             return View(galleries);
         }
 
-        [Route("/gallery/{name}")]
-        public IActionResult Gallery(string name)
+        [Route("/gallery/{id}")]
+        public IActionResult Gallery(string id)
         {
             Gallery gallery = new Gallery()
             {
-                Name = name,
-                Url = "/gallery/" + name,
+                ID = id,
+                Name = id,
+                Url = "/gallery/" + id,
                 Images = new List<Image>()
                 {
-                    new Image {Name="One", ImageUrl="~/images/gallery/b25-1.JPG"},
-                    new Image {Name="Two", ImageUrl="~/images/gallery/b38.JPG"},
-                    new Image {Name="Three", ImageUrl="~/images/gallery/b47.JPG"},
-                    new Image {Name="Four", ImageUrl="~/images/gallery/b55.JPG"},
-                    new Image {Name="Five", ImageUrl="~/images/gallery/c6.JPG"},
-                    new Image {Name="Six", ImageUrl="~/images/gallery/c33.JPG"}
+                    new Image {ID="One", Name="One", ImageUrl="~/images/gallery/b25-1.JPG"},
+                    new Image {ID="Two", Name="Two", ImageUrl="~/images/gallery/b38.JPG"},
+                    new Image {ID="Three", Name="Three", ImageUrl="~/images/gallery/b47.JPG"},
+                    new Image {ID="Four", Name="Four", ImageUrl="~/images/gallery/b55.JPG"},
+                    new Image {ID="Five", Name="Five", ImageUrl="~/images/gallery/c6.JPG"},
+                    new Image {ID="Six", Name="Six", ImageUrl="~/images/gallery/c33.JPG"}
                 }
             };
 

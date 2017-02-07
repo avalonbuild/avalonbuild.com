@@ -108,7 +108,8 @@
 
 			$(function () {
 
-			    $("#nav-button").click(function () {
+			    $("#nav-button").click(function (e) {
+                    e.preventDefault();
 					$("#nav-button i").toggleClass("open");
 					$("#nav ul").toggleClass("open");
 				});

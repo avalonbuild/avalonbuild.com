@@ -9,6 +9,7 @@ namespace avalonbuild.com.Models.Galleries
 			Images = new List<Image>();
 		}
 
+		public string ID { get; set; }
 		public string Name { get; set; }
 		public string Url { get; set; }
 		public string ImageUrl { get; set; }
