@@ -61,7 +61,7 @@ body,
 
 	position: relative;
 	padding: $line-height * 4em 0 $line-height * 4em 0;
-	background-attachment: fixed;
+	background-attachment: scroll;
 	background-color: $primary-color;
 	background-image: linear-gradient(
       rgba(0, 0, 0, 0.3),
