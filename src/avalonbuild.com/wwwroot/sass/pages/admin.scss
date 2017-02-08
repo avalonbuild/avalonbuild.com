@@ -1,0 +1,24 @@
+﻿@import "site/settings";
+@import "watercolor/modules/grid";
+
+//
+// Admin
+//
+
+#admin {
+
+	ul {
+		@include grid;
+		list-style: none;
+	}
+
+	li {
+		@include column(3);
+		border: 1px solid #f0f0f0;
+	}
+
+	a {
+		display: block;
+		padding: 3em 0;
+	}
+}

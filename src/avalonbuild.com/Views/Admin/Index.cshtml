@@ -1,0 +1,31 @@
+@model avalonbuild.com.Models.Contact
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    ViewBag.Title = "Administration";
+    ViewBag.Description = "Administration";
+}
+
+@section Styles {
+	<link rel="stylesheet" href="~/css/pages/admin.css")">
+}
+
+<section id="admin">
+
+	<div class="container">
+
+		<header>
+
+			<h2>@ViewBag.Title</h2>
+
+		</header>
+
+		<ul>
+			<li><a href="/changepassword">Change Password</a></li>
+			<li><a href="/admin/users">Manage Users</a></li>
+			<li><a href="/logoff">Log Off</a></li>
+		</ul>
+
+	</div>
+
+</section>
