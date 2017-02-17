@@ -24,8 +24,6 @@ namespace avalonbuild.com.Controllers
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            IEmailSender emailSender,
-            ISmsSender smsSender,
             ILoggerFactory loggerFactory)
         {
             _userManager = userManager;
@@ -49,11 +47,13 @@ namespace avalonbuild.com.Controllers
         public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = "/admin")
         {
             ViewData["ReturnUrl"] = returnUrl;
+
             if (ModelState.IsValid)
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
+
                 if (result.Succeeded)
                 {
                     _logger.LogInformation(1, "User logged in.");
@@ -80,6 +80,7 @@ namespace avalonbuild.com.Controllers
                 return RedirectToAction(nameof(HomeController.Index), "Home");
 
             ViewData["ReturnUrl"] = returnUrl;
+
             return View();
         }
 
@@ -94,22 +95,21 @@ namespace avalonbuild.com.Controllers
                 return RedirectToAction(nameof(HomeController.Index), "Home");
 
             ViewData["ReturnUrl"] = returnUrl;
+
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await _userManager.CreateAsync(user, model.Password);
+
                 if (result.Succeeded)
                 {
-                    // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=532713
-                    // Send an email with this link
-                    //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
-                    //await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
-                    //    $"Please confirm your account by clicking this link: <a href='{callbackUrl}'>link</a>");
                     await _signInManager.SignInAsync(user, isPersistent: false);
+
                     _logger.LogInformation(3, "User created a new account with password.");
+
                     return RedirectToLocal(returnUrl);
                 }
+
                 AddErrors(result);
             }
 
@@ -122,7 +122,9 @@ namespace avalonbuild.com.Controllers
         public async Task<IActionResult> LogOff()
         {
             await _signInManager.SignOutAsync();
+
             _logger.LogInformation(4, "User logged out.");
+
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }
 
@@ -142,22 +144,30 @@ namespace avalonbuild.com.Controllers
             {
                 return View(model);
             }
+
             var user = await GetCurrentUserAsync();
+
             if (user != null)
             {
                 var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
+
                     _logger.LogInformation(3, "User changed their password successfully.");
+
                     return RedirectToAction("index", "admin");
                 }
+
                 AddErrors(result);
+
                 return View(model);
             }
 
             return RedirectToAction("index", "admin");
         }
+
         #region Helpers
 
         private void AddErrors(IdentityResult result)

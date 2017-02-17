@@ -1,0 +1,52 @@
+﻿@model User
+
+@{
+    ViewBag.Title = "Add User";
+	ViewBag.Description = "Add User";
+}
+
+@section Styles {
+	<link rel="stylesheet" href="~/css/pages/users-add.css">
+}
+
+<section id="user-add">
+
+	<div class="container">
+
+		<header>
+
+			<h2>Add User</h2>
+
+		</header>
+
+		<form asp-controller="Users" asp-action="Add" method="post">
+
+            <div asp-validation-summary="All" class="alert"></div>
+
+			<div class="field">
+                <label asp-for="Email"></label>
+                <input asp-for="Email"/>
+                <span asp-validation-for="Email" class="hint"></span>
+            </div>
+
+			<div class="field">
+                <label asp-for="Password"></label>
+                <input asp-for="Password"/>
+                <span asp-validation-for="Password" class="hint"></span>
+            </div>
+
+            <div class="field">
+                <label asp-for="ConfirmPassword"></label>
+                <input asp-for="ConfirmPassword"/>
+                <span asp-validation-for="ConfirmPassword" class="hint"></span>
+            </div>
+
+			<p>
+				<button type="submit">Add User</button>
+			</p>
+
+		</form>
+
+	</div>
+
+</section>
