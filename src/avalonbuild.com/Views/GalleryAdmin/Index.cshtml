@@ -1,0 +1,279 @@
+@model avalonbuild.com.Models.Gallery
+
+@{
+    ViewBag.Title = "Galleries";
+	ViewBag.Description = "Galleries";
+}
+
+@section Styles {
+	<link rel="stylesheet" href="~/css/pages/admin/galleries/index.css">
+}
+
+<section id="galleries">
+
+	<div class="container">
+
+		<header>
+
+			<h2>@ViewBag.Title</h2>
+
+		</header>
+
+		<a data-dialog="addgallerydialog" class="button">Add Gallery</a>
+
+		<div id="galleries-alert" class="alert success"></div>
+
+		<ul id="galleries-list"></ul>
+
+	</div>
+
+	<div id="addgallerydialog" class="dialog">
+
+		<div class="dialog__overlay"></div>
+
+		<div class="dialog__content">
+
+			<a class="dialog__close" data-dialog-close></a>
+
+			<div id="gallery-add">
+
+				<h2>Add a Gallery</h2>
+
+				<form id="add-gallery-form" method="post" asp-antiforgery="true">
+
+					<div id="add-gallery-response" class="alert error"></div>
+
+					<div class="field">
+						<label asp-for="Title"></label>
+						<input asp-for="Title"/>
+					</div>
+
+					<div class="field">
+						<label asp-for="Description"></label>
+						<input asp-for="Description"/>
+					</div>
+
+					<ul id="images-list"></ul>
+
+					<div class="buttons">
+						<a id="create" class="button">Add Gallery</a>
+					</div>
+
+				</form>
+
+			</div>
+
+		</div>
+	</div>
+
+</section>
+
+@section Scripts {
+
+		<script src="~/js/classie.js"></script>
+		<script src="~/js/dialogFx.js"></script>
+
+		<script>
+
+			var dlg;
+
+			(function() {
+
+				var dlgtrigger = document.querySelector( '[data-dialog]' ),
+					somedialog = document.getElementById( dlgtrigger.getAttribute( 'data-dialog' ) );
+
+				dlg = new DialogFx( somedialog );
+
+				dlgtrigger.addEventListener( 'click', dlg.toggle.bind(dlg) );
+
+				GetGalleries();
+				GetImages();
+
+			})();
+
+			$("#create").click(GalleryAdd);
+
+			function GetGalleries()
+			{
+				var list = $('#galleries-list');
+
+				$.getJSON('@Url.Action("GetAll","Gallery")', function (data) {
+
+					list.empty();
+
+					$.each(data, function(i, field){
+
+						var li = $('<li data-gallery-id="' + field.id + '">');
+
+						var img;
+
+						if (field.images.length > 0)
+							img = $('<img src="/file/' + field.images[0].fileName + '"/>');
+						else
+							img = $('<img src="/images/galleries/default.jpg"/>');
+
+						var del = $('<a class="delete" title="Delete Gallery" href="/admin/galleries/delete/' + field.id + '"></a>');
+
+						del.click(function (evt) {
+							evt.preventDefault();
+							DeleteGallery($(this).attr("href"));
+						});
+
+						li.append(img);
+						li.append(del);
+						list.append(li);
+					});
+
+				});
+			}
+
+			function GetImages()
+			{
+				var list = $('#images-list');
+
+				$.getJSON('@Url.Action("Get","Image")', function (data) {
+
+					list.empty();
+
+					$.each(data, function(i, field){
+
+						var li = $('<li data-image-id="' + field.id + '">');
+						var img = $('<img src="/file/' + field.fileName + '"/>');
+
+						li.click(function (evt) {
+
+							if ($(this).attr("data-selected") == "true")
+								$(this).removeAttr("data-selected");
+							else
+								$(this).attr("data-selected", "true");
+
+						});
+
+						li.append(img);
+						list.append(li);
+
+					});
+
+				});
+			}
+
+			function DeleteGallery(url)
+			{
+				$.ajax({
+					type: 'DELETE',
+					url: url,
+					success: function(data, textStatus, jqXHR) {
+						GetGalleries();
+					},
+					error: function (jqXHR, textStatus, errorThrown) {
+						alert("error deleting gallery id:" + id);
+					}
+				});
+			}
+
+			function GalleryAdd()
+			{
+				var form = $("#add-gallery-form");
+				var token = form.find("input[name=__RequestVerificationToken]").val();
+
+				var datajson = {
+					name: form.find('input[name="Title"]').val().replace(/ /g, '-').toLowerCase(),
+					title: form.find('input[name="Title"]').val(),
+					description: form.find('input[name="Description"]').val()
+				}
+
+				datajson.images = GetSelectedImages();
+
+				$.ajax({
+					type: 'POST',
+					url: '@Url.Action("Create","Gallery")',
+					headers: {
+						"RequestVerificationToken": token
+					},
+					contentType: "application/json; charset=utf-8",
+					dataType: "json",
+					data: JSON.stringify(datajson),
+					statusCode: {
+						200: function(data, textStatus, jqXHR) {
+							GalleryAddSuccess(data);
+							GetGalleries();
+						},
+						400: function(jqXHR, textStatus, errorThrown) {
+							GalleryAddError(jqXHR.responseText);
+						}
+					},
+					error: function (jqXHR, textStatus, errorThrown) {
+						GalleryAddError("Error adding gallery.");
+					}
+				});
+			}
+
+			function GalleryAddSuccess(message)
+			{
+				setAlert(message, "success");
+
+				var inputs = $("#add-gallery-form :input:not([type='hidden'])");
+
+				$.each(inputs, function (key, input) {
+					input.value = null;
+				});
+
+				ClearSelectedImages();
+
+				dlg.toggle();
+			}
+
+			function GalleryAddError(message)
+			{
+				var response = $("#add-gallery-response");
+				response.addClass("show");
+				response.html(message);
+			}
+
+			function setAlert(message, type)
+			{
+				var alert = $("#galleries-alert");
+
+				alert.removeClass("success");
+				alert.removeClass("error");
+
+				alert.addClass("show");
+				alert.addClass(type);
+
+				alert.html(message);
+
+				setTimeout(hideAlert, 5000);
+			}
+
+			function hideAlert(message)
+			{
+				var alert = $("#galleries-alert");
+				alert.removeClass("show");
+			}
+
+			function GetSelectedImages()
+			{
+				var images = [];
+
+				$.each($("#images-list li[data-selected=true]"), function (key, value) {
+
+					var id = $(this).attr("data-image-id");
+					images.push({Id: id});
+
+				});
+
+				return images;
+			}
+
+			function ClearSelectedImages()
+			{
+				$.each($("#images-list li[data-selected=true]"), function (key, value) {
+
+					$(this).removeAttr("data-selected");
+
+				});
+			}
+
+		</script>
+
+}

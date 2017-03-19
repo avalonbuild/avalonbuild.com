@@ -1,8 +1,8 @@
-﻿@model avalonbuild.com.Models.Galleries.Gallery
+﻿@model avalonbuild.com.ViewModels.Gallery
 
 @{
-    ViewBag.Title = Model.Name;
-	ViewBag.Description = Model.Name;
+    ViewBag.Title = Model.Title;
+	ViewBag.Description = Model.Description;
 }
 
 @section Styles {
@@ -15,29 +15,37 @@
 
 		<header>
 
-			<h2>@Model.Name</h2>
+			<h2>@Model.Title</h2>
 
 		</header>
 
-		<ul>
-			@foreach (var image in Model.Images)
-			{
-				<li>
+		@if (Model.Images.Count > 0)
+		{
+			<ul>
+				@foreach (var image in Model.Images)
+				{
+					<li>
 
-					<a href="">
+						<a href="">
 
-					<figure>
-						<img src="@Url.Content(@image.ImageUrl)" alt="@image.Name">
-						<figcaption>
-							<h3>@image.Name</h3>
-						</figcaption>
-					</figure>
+						<figure>
+							<img src="/file/@image.FileName" alt="@image.Title">
+							<figcaption>
+								<h3>@image.Title</h3>
+							</figcaption>
+						</figure>
 
-					</a>
+						</a>
 
-				</li>
-			}
-		</ul>
+					</li>
+				}
+			</ul>
+
+		}
+		else
+		{
+			<div>No Images</div>
+		}
 
 	</div>
 

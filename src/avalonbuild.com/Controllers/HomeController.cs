@@ -1,12 +1,21 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using avalonbuild.com.Data;
 using avalonbuild.com.Models;
-using avalonbuild.com.Models.Galleries;
 
 namespace avalonbuild.com.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly ImageDbContext _images;
+
+        public HomeController(ImageDbContext images)
+        {
+            _images = images;
+        }
+
         [Route("/")]
         public IActionResult Index()
         {
@@ -20,45 +29,60 @@ namespace avalonbuild.com.Controllers
         }
 
         [Route("/galleries")]
-        public IActionResult Galleries()
+        public async Task<IActionResult> Galleries()
         {
-            List<Gallery> galleries = new List<Gallery>()
-            {
-                new Gallery {Name="Interiors", Url= "/gallery/interiors", ImageUrl="~/images/galleries/interiors.jpg"},
-                new Gallery {Name="Exteriors", Url= "/gallery/exteriors", ImageUrl="~/images/galleries/exteriors.jpg"},
-                new Gallery {Name="Details", Url= "/gallery/details", ImageUrl="~/images/galleries/details.jpg"},
-                new Gallery {Name="Before and After", Url= "/gallery/before-and-after", ImageUrl="~/images/galleries/before-and-after.jpg"}
-            };
+            var galleries = await _images.Galleries.Include(g => g.Images).ThenInclude(i => i.Image).ToListAsync();
 
-            return View(galleries);
+            var model = new List<ViewModels.Gallery>();
+
+            foreach (var gallery in galleries)
+            {
+                model.Add(GalleryModelToViewModel(gallery));
+            }
+
+            return View(model);
         }
 
-        [Route("/gallery/{id}")]
-        public IActionResult Gallery(string id)
+        [Route("/gallery/{name}")]
+        public async Task<IActionResult> Gallery(string name)
         {
-            Gallery gallery = new Gallery()
-            {
-                ID = id,
-                Name = id,
-                Url = "/gallery/" + id,
-                Images = new List<Image>()
-                {
-                    new Image {ID="One", Name="One", ImageUrl="~/images/gallery/b25-1.JPG"},
-                    new Image {ID="Two", Name="Two", ImageUrl="~/images/gallery/b38.JPG"},
-                    new Image {ID="Three", Name="Three", ImageUrl="~/images/gallery/b47.JPG"},
-                    new Image {ID="Four", Name="Four", ImageUrl="~/images/gallery/b55.JPG"},
-                    new Image {ID="Five", Name="Five", ImageUrl="~/images/gallery/c6.JPG"},
-                    new Image {ID="Six", Name="Six", ImageUrl="~/images/gallery/c33.JPG"}
-                }
-            };
+            var gallery = await _images.Galleries.Include(g => g.Images).ThenInclude(i => i.Image).FirstOrDefaultAsync(i => i.Name.ToLower() == name.Replace('-', ' ').ToLower());
 
-            return View(gallery);
+            if (gallery == null)
+                return NotFound();
+
+            return View(GalleryModelToViewModel(gallery));
         }
 
         [Route("/referrals")]
         public IActionResult Referrals()
         {
             return View();
+        }
+
+        private ViewModels.Gallery GalleryModelToViewModel(Models.Gallery gallery)
+        {
+                var modelGallery = new ViewModels.Gallery {
+                    ID = gallery.ID,
+                    Name = gallery.Name,
+                    Title = gallery.Title,
+                    Description = gallery.Description
+                };
+
+                foreach (var image in gallery.Images)
+                {
+                    var modelImage = new ViewModels.Image {
+                        ID = image.Image.ID,
+                        Name = image.Image.Name,
+                        Title = image.Image.Title,
+                        Description = image.Image.Description,
+                        FileName = image.Image.FileName
+                    };
+
+                    modelGallery.Images.Add(modelImage);
+                }
+
+                return modelGallery;
         }
 
     }

@@ -4,5 +4,14 @@
 	<li><a href="/galleries">Galleries</a></li>
 	<li><a href="/referrals">Referrals</a></li>
 	<li><a href="/#contact">Contact Us</a></li>
+	@if(User.Identity.IsAuthenticated)
+	{
+		<li><a href="/admin">Administration</a></li>
+		<li><a href="/changepassword">Change Password</a></li>
+		<li><a href="/admin/galleries">Manage Galleries</a></li>
+		<li><a href="/admin/images">Manage Images</a></li>
+		<li><a href="/admin/users">Manage Users</a></li>
+		<li><a href="/logoff">Log Off</a></li>
+	}
 
 </ul>

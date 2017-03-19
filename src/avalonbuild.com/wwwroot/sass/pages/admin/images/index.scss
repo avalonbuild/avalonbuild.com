@@ -1,0 +1,112 @@
+﻿@import "site/settings";
+@import "watercolor/modules/grid";
+@import "watercolor/elements/alert";
+@import "watercolor/elements/field";
+
+//
+// Images Index
+//
+
+#images {
+
+	ul {
+		padding: 0;
+		list-style: none;
+
+		@include grid;
+	}
+
+	li {
+		position: relative;
+		margin-bottom: $line-height * 1em;
+
+		@include column;
+
+		@include breakpoint(medium) {
+            @include column(4);
+        }
+	}
+
+	img {
+		display: block;
+	}
+
+	.delete {
+		position: absolute;
+		top: -.5em;
+		right: -.5em;
+		width: 1.25em;
+		height: 1.25em;
+		background-color: #cc2200;
+		border-radius: 50%;
+		box-shadow: 0 2px 5px rgba(0,0,0,0.25);
+		color: white;
+		font-weight: 400;
+		line-height: 1.25em;
+		vertical-align: middle;
+
+		&::before {
+			content: '\00d7';
+		}
+	}
+
+	.alert {
+
+		ul {
+			margin: 0;
+			padding: 0;
+			list-style: none;
+		}
+
+		&.validation-summary-errors {
+			display: block;
+			@include alert(error);
+		}
+	}
+}
+
+//
+// Add Image
+//
+
+#image-add {
+
+	h2 {
+		margin-top: 0;
+	}
+
+	form {
+		text-align: left;
+
+		input {
+			width: 100%;
+		}
+	}
+
+	p {
+		text-align: right;
+	}
+
+	.buttons {
+		margin-top: $line-height * 2em;
+		text-align: center;
+	}
+
+	.field {
+		@include field;
+	}
+
+	.alert {
+
+		ul {
+			margin: 0;
+			padding: 0;
+			list-style: none;
+		}
+
+		&.validation-summary-errors {
+			display: block;
+			@include alert(error);
+		}
+	}
+}

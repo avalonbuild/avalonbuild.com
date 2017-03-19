@@ -1,4 +1,4 @@
-﻿@model System.Collections.Generic.List<avalonbuild.com.Models.Galleries.Gallery>
+﻿@model System.Collections.Generic.List<avalonbuild.com.ViewModels.Gallery>
 
 @{
     ViewBag.Title = "Galleries";
@@ -26,12 +26,12 @@
 				{
 					<li>
 
-						<a href="@gallery.Url">
+						<a href="/gallery/@gallery.Name">
 
 							<figure>
-								<img src="@Url.Content(@gallery.ImageUrl)" alt="@gallery.Name">
+								<img src="/file/@gallery.Images[0].FileName" alt="@gallery.Title">
 								<figcaption>
-									<h3>@gallery.Name</h3>
+									<h3>@gallery.Title</h3>
 								</figcaption>
 							</figure>
 

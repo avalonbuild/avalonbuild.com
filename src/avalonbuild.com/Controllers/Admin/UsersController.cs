@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using avalonbuild.com.Models;
-using avalonbuild.com.Models.Users;
+using avalonbuild.com.ViewModels;
 
 namespace avalonbuild.com.Controllers
 {

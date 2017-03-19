@@ -1,0 +1,198 @@
+@model avalonbuild.com.Models.Image
+
+@{
+    ViewBag.Title = "Images";
+	ViewBag.Description = "Images";
+}
+
+@section Styles {
+	<link rel="stylesheet" href="~/css/pages/admin/images/index.css">
+}
+
+<section id="images">
+
+	<div class="container">
+
+		<header>
+
+			<h2>@ViewBag.Title</h2>
+
+		</header>
+
+		<a data-dialog="addimagedialog" class="button trigger">Add Image</a>
+
+		<ul id="images-list"></ul>
+
+	</div>
+
+	<div id="addimagedialog" class="dialog">
+
+		<div class="dialog__overlay"></div>
+
+		<div class="dialog__content">
+
+			<a class="dialog__close" data-dialog-close></a>
+
+			<div id="image-add">
+
+				<h2>Add an Image</h2>
+
+				<form id="add-image-form" method="post" asp-antiforgery="true" enctype="multipart/form-data">
+
+					<div id="add-image-response" class="alert">test</div>
+
+					<div class="field">
+						<label asp-for="Name"></label>
+						<input asp-for="Name"/>
+					</div>
+
+					<div class="field">
+						<label asp-for="Title"></label>
+						<input asp-for="Title"/>
+					</div>
+
+					<div class="field">
+						<label asp-for="Description"></label>
+						<input asp-for="Description"/>
+					</div>
+
+					<div class="field">
+						<label for="file">Image File</label>
+						<input type="file" id="file" name="file" />
+					</div>
+
+					<div class="buttons">
+						<a id="upload" class="button">Add Image</a>
+					</div>
+
+				</form>
+
+			</div>
+
+		</div>
+
+	</div>
+
+</section>
+
+@section Scripts {
+
+		<script src="~/js/classie.js"></script>
+		<script src="~/js/dialogFx.js"></script>
+
+		<script>
+
+			(function() {
+
+				var dlgtrigger = document.querySelector( '[data-dialog]' ),
+					somedialog = document.getElementById( dlgtrigger.getAttribute( 'data-dialog' ) ),
+					dlg = new DialogFx( somedialog );
+
+				dlgtrigger.addEventListener( 'click', dlg.toggle.bind(dlg) );
+
+				PopulateImages();
+
+			})();
+
+			$("#upload").click(function (evt) {
+
+				//add the file(s)
+				var fileUpload = $("#file").get(0);
+				var files = fileUpload.files;
+				var data = new FormData();
+
+				for (var i = 0; i < files.length ; i++) {
+					data.append(files[i].name, files[i]);
+				}
+
+				//add the data
+				var postData = $('#add-image-form :input');
+				$.each(postData, function (key, input) {
+					data.append(input.name, input.value);
+				});
+
+				$.ajax({
+					type: "POST",
+					url: '@Url.Action("Add","Image")',
+					contentType: false,
+					processData: false,
+					data: data,
+					statusCode: {
+						200: function(data, textStatus, jqXHR) {
+							ImageUploadSuccess(data);
+							PopulateImages();
+						},
+						400: function(jqXHR, textStatus, errorThrown) {
+							ImageUploadError(jqXHR.responseText);
+						}
+					},
+					error: function (jqXHR, textStatus, errorThrown) {
+						ImageUploadError("Error uploading image.");
+					}
+				});
+			});
+
+			function PopulateImages()
+			{
+				var list = $('#images-list');
+
+				$.getJSON('@Url.Action("Get","Image")', function (data) {
+
+					list.empty();
+					$.each(data, function(i, field){
+						var li = $('<li>');
+						var img = $('<img src="/file/' + field.fileName + '"/>');
+						var del = $('<a class="delete" title="Delete Image" href="/admin/images/delete/' + field.id + '"></a>');
+
+						del.click(function (evt) {
+							evt.preventDefault();
+							DeleteImage($(this).attr("href"));
+						});
+
+						li.append(img);
+						li.append(del);
+						list.append(li);
+					});
+
+				});
+			}
+
+			function DeleteImage(url)
+			{
+				$.ajax({
+					url: url,
+					success: function(data, textStatus, jqXHR) {
+						PopulateImages();
+					},
+					error: function (jqXHR, textStatus, errorThrown) {
+						alert("error deleting image id:" + id);
+					}
+				});
+			}
+
+			function ImageUploadSuccess(message)
+			{
+				var response = $("#add-image-response");
+				response.removeClass("error");
+				response.addClass("success show");
+				response.html(message);
+
+				var inputs = $("#add-image-form :input:not([type='hidden'])");
+
+				$.each(inputs, function (key, input) {
+					input.value = null;
+				});
+			}
+
+			function ImageUploadError(message)
+			{
+				var response = $("#add-image-response");
+				response.removeClass("success");
+				response.addClass("error show");
+				response.html(message);
+				$("#add-image-response").html(message);
+			}
+
+		</script>
+
+}

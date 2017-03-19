@@ -24,11 +24,11 @@ namespace avalonbuild.com
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
 
-            if (env.IsDevelopment())
-            {
-                // For more details on using the user secret store see https://go.microsoft.com/fwlink/?LinkID=532709
-                builder.AddUserSecrets();
-            }
+            // if (env.IsDevelopment())
+            // {
+            //     // For more details on using the user secret store see https://go.microsoft.com/fwlink/?LinkID=532709
+            //     builder.AddUserSecrets();
+            // }
 
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
@@ -44,6 +44,12 @@ namespace avalonbuild.com
             services.Configure<AppSettings>(options => Configuration.GetSection("AppSettings").Bind(options));
 
             // Add framework services.
+            services.AddDbContext<FileDbContext>(options =>
+                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddDbContext<ImageDbContext>(options =>
+                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
 
