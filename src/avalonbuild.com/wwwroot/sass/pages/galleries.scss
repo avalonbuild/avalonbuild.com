@@ -15,7 +15,7 @@
 	}
 
 	li {
-		margin: $line-height * 1em 0;
+		margin: $line-height * 1em 0 0 0;
 
 		@include column();
 

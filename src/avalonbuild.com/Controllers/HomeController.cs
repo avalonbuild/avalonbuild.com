@@ -46,7 +46,7 @@ namespace avalonbuild.com.Controllers
         [Route("/gallery/{name}")]
         public async Task<IActionResult> Gallery(string name)
         {
-            var gallery = await _images.Galleries.Include(g => g.Images).ThenInclude(i => i.Image).FirstOrDefaultAsync(i => i.Name.ToLower() == name.Replace('-', ' ').ToLower());
+            var gallery = await _images.Galleries.Include(g => g.Images).ThenInclude(i => i.Image).FirstOrDefaultAsync(i => i.Name == name);
 
             if (gallery == null)
                 return NotFound();
