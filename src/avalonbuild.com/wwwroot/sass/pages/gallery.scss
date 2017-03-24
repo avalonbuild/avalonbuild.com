@@ -79,28 +79,6 @@
 	text-align: center;
 	background: rgba(55, 58, 71, 0.9);
 
-	div h3,
-	div p{
-		box-sizing: border-box;
-		padding: 0px 20px;
-		width: 50%;
-		height: 60px;
-	}
-
-	div h3{
-		font-size: 36px;
-		float: left;
-		text-align: right;
-		border-right: 1px solid rgba(255,255,255,0.6);
-	}
-
-	div p{
-		text-align: left;
-		float: left;
-		font-size: 16px;
-		font-style: italic;
-	}
-
 	a.lb-close{
 		background: rgba(25, 28, 41, 0.9);
 		z-index: 1001;
@@ -138,22 +116,6 @@
 	}
 }
 
-.lb-overlay > div{
-	position: relative;
-	color: rgba(255,255,255,0.8);
-	opacity: 0;
-	filter: alpha(opacity=0); /* internet explorer */
-    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(opacity=0)"; /*IE8*/
-	margin: 10px auto 0px auto;
-	text-shadow: 0px 1px 1px rgba(0,0,0,0.6);
-	-webkit-transition: opacity 0.3s linear 1.3s;
-	-moz-transition: opacity 0.3s linear 1.3s;
-	-o-transition: opacity 0.3s linear 1.3s;
-	-ms-transition: opacity 0.3s linear 1.3s;
-	transition: opacity 0.3s linear 1.3s;
-}
-
-
 .lb-overlay:target {
 	width: auto;
 	height: auto;
@@ -169,8 +131,7 @@
 		animation: fadeInScale 1.2s ease-in-out;
 	}
 
-	a.lb-close,
-	& > div{
+	a.lb-close {
 		opacity: 1;
 		filter: alpha(opacity=99); /* internet explorer */
 		-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(opacity=99)"; /*IE8*/

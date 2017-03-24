@@ -109,6 +109,42 @@
 }
 
 //
+// Featured
+//
+
+#featured {
+
+	a {
+		display: inline-block;
+		margin: 1em 0;
+		padding: .25em 1em;
+		border: 2px solid #7ac143;
+		border-radius: .25em;
+		font-size: .625em;
+
+		strong {
+			font-size: 1.75em;
+			color: #7ac143;
+		}
+
+		img {
+			height: 2.5em;
+			vertical-align: -35%;
+			margin-left: .5em;
+		}
+
+		@include breakpoint(small) {
+            font-size: .75em;
+        }
+
+		@include breakpoint(medium) {
+			margin: 2em 0;
+            font-size: 1em;
+        }
+	}
+}
+
+//
 // About
 //
 
@@ -230,10 +266,19 @@
 }
 
 //
+// Available Properties
+//
+
+#properties {
+
+}
+
+//
 // Referrals
 //
 
 #referrals {
+	background-color: #f8fafc;
 
 	ul {
 		list-style: none;
@@ -276,56 +321,6 @@
 }
 
 //
-// Team
-//
-
-#team {
-	background-color: #f8fafc;
-
-	p {
-		text-align: justify;
-		@include column(4);
-
-        @include breakpoint(small) {
-            @include column(6);
-        }
-
-		@include breakpoint(medium) {
-			@include column($prefix: 1, $suffix: 1);
-        }
-
-		@include breakpoint(large) {
-            @include column($prefix: 1, $suffix: 1);
-        }
-
-		@include breakpoint(extra-large) {
-            @include column($prefix: 2, $suffix: 2);
-        }
-	}
-
-	ul {
-		list-style: none;
-		padding: 0;
-
-		@include breakpoint(small) {
-            display: flex;
-			justify-content: center;
-        }
-	}
-
-	.bio {
-		margin: $line-height * 1em;
-
-		img {
-			width: 10em;
-			border-radius: 50%;
-			align-self: center;
-		}
-	}
-
-}
-
-//
 // Contact
 //
 
@@ -364,6 +359,7 @@
 
 	#Name,
 	#Email,
+	#Phone,
 	#Message {
 		-moz-box-sizing: border-box;
 		box-sizing: border-box;

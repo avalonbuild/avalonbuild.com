@@ -9,6 +9,24 @@
 	<link rel="stylesheet" href="~/css/pages/galleries.css">
 }
 
+@section Scripts {
+
+	<script>
+
+		$(function () {
+
+			//
+			// Make saving images a little more difficult
+			//
+
+			$("body").on("contextmenu", "img", function(e) {
+				return false;
+			});
+		});
+
+	</script>
+}
+
 <section id="galleries">
 
 	<div class="container">

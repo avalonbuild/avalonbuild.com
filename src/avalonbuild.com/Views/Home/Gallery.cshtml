@@ -9,6 +9,24 @@
 	<link rel="stylesheet" href="~/css/pages/gallery.css">
 }
 
+@section Scripts {
+
+	<script>
+
+		$(function () {
+
+			//
+			// Make saving images a little more difficult
+			//
+
+			$("body").on("contextmenu", "img", function(e) {
+				return false;
+			});
+		});
+
+	</script>
+}
+
 <section id="gallery">
 
 	<div class="container">
@@ -38,10 +56,6 @@
 						<div class="lb-overlay" id="@image.Name">
 							<a href="#gallery-@image.Name" class="lb-close">&times; CLOSE</a>
 							<img src="/file/@image.FileName" alt="@image.Title" />
-							<div>
-								<h3>@image.Title</h3>
-								<p>@image.Description</p>
-							</div>
 
 						</div>
 

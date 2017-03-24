@@ -25,7 +25,16 @@
 
 }
 
-<section id="about">
+<section id="featured">
+
+	<a href="http://www.houzz.com/user/clint-kolodziej">
+		<strong>Featured on</strong> <img src="/images/social/houzz_logo.svg"/>
+	</a>
+
+</section>
+
+<!--
+	<section id="about">
 
 	<div class="container">
 
@@ -54,6 +63,7 @@
 	</div>
 
 </section>
+-->
 
 <section id="services">
 
@@ -72,8 +82,8 @@
 				<figure>
 					<img src="~/images/services/custom-homes.jpg" alt="Custom Homes">
 					<figcaption>
-						<h3>Custom Homes</h3>
-						<p>We'll help you build the home of your dreams.</p>
+						<h3>Artisan Built Custom Homes</h3>
+						<p>From the ground up, no compromises, this is our specialty. Your project is in our very conscientious hands.</p>
 					</figcaption>
 				</figure>
 
@@ -84,32 +94,8 @@
 				<figure>
 					<img src="~/images/services/remodeling.jpg" alt="Remodeling">
 					<figcaption>
-						<h3>Remodeling</h3>
-						<p>We'll help you build the home of your dreams.</p>
-					</figcaption>
-				</figure>
-
-			</li>
-
-			<li>
-
-				<figure>
-					<img src="~/images/services/design.jpg" alt="Design Services">
-					<figcaption>
-						<h3>Design Services</h3>
-						<p>We'll help you build the home of your dreams.</p>
-					</figcaption>
-				</figure>
-
-			</li>
-
-			<li>
-
-				<figure>
-					<img src="~/images/services/consulting.jpg" alt="Consulting and Project Management">
-					<figcaption>
-						<h3>Consulting and Project Management</h3>
-						<p>We'll help you build the home of your dreams.</p>
+						<h3>Remodeling and Renewals</h3>
+						<p>Kitchens, bathrooms, finished basements, additions … we want you to love your home.</p>
 					</figcaption>
 				</figure>
 
@@ -120,8 +106,8 @@
 				<figure>
 					<img src="~/images/services/architecture.jpg" alt="Architecture">
 					<figcaption>
-						<h3>Architecture</h3>
-						<p>We'll help you build the home of your dreams.</p>
+						<h3>Architecture and Design</h3>
+						<p>We match your lifestyle and aspirations to one of our architects and bring your ideas and desires to life, while contributing our expertise. From interiors to exteriors, from sketches to custom cabinets, bespoke furniture, fixtures and finishes… let us create spaces for you.</p>
 					</figcaption>
 				</figure>
 
@@ -130,22 +116,10 @@
 			<li>
 
 				<figure>
-					<img src="~/images/services/cabinetry.jpg" alt="Bespoke Cabinetry/etc">
+					<img src="~/images/services/commercial.jpg" alt="Commercial">
 					<figcaption>
-						<h3>Bespoke Cabinetry/etc</h3>
-						<p>We'll help you build the home of your dreams.</p>
-					</figcaption>
-				</figure>
-
-			</li>
-
-			<li>
-
-				<figure>
-					<img src="~/images/services/outdoor.jpg" alt="Landscaping/Outdoor Living">
-					<figcaption>
-						<h3>Landscaping/Outdoor Living</h3>
-						<p>We'll help you build the home of your dreams.</p>
+						<h3>Commercial Construction and Project Management</h3>
+						<p>Restaurants, retail, and multi-family, project management that delivers on budget and on time.</p>
 					</figcaption>
 				</figure>
 
@@ -169,13 +143,29 @@
 
 </section>
 
+<section id="properties">
+
+	<div class="container">
+
+		<header>
+
+			<h2>Available Properties</h2>
+
+		</header>
+
+		<p>Properties go here ... TBD</p>
+
+	</div>
+
+</section>
+
 <section id="referrals">
 
 	<div class="container">
 
 		<header>
 
-			<h2>What Our Customers Say</h2>
+			<h2>What Our Clients Say</h2>
 
 		</header>
 
@@ -202,59 +192,11 @@
 
 			</li>
 
-
-
 		</ul>
 
 		<p>
-			<a class="button" href="/referrals">See What Our Customers Say</a>
+			<a class="button" href="/referrals">See What Our Clients Say</a>
 		</p>
-
-	</div>
-
-</section>
-
-<section id="team">
-
-	<div class="container">
-
-		<header>
-
-			<h2>Our Team</h2>
-
-		</header>
-
-		<p>
-			Our team have been South Barrington residents for over 25 years and are well respected in the community, through business reputation and community involvement.  We'll be happy to use our expertise to help you get the home of your dreams.
-		</p>
-
-		<ul>
-
-			<li>
-
-				<figure class="bio">
-					<img src="~/images/bio/john.png" alt="John Elias (Owner and President)">
-					<figcaption>
-						John Elias<br/>
-						<small>Owner and President</small>
-					</figcaption>
-				</figure>
-
-			</li>
-
-			<li>
-
-				<figure class="bio">
-					<img src="~/images/bio/tara.png" alt="Tara Gordon (Office Manager)">
-					<figcaption>
-						Tara Gordon<br/>
-						<small>Office Manager</small>
-					</figcaption>
-				</figure>
-
-			</li>
-
-		</ul>
 
 	</div>
 
@@ -282,6 +224,9 @@
 
 				<label asp-for="Email"></label>
 				<input asp-for="Email" type="email" />
+
+				<label asp-for="Phone"></label>
+				<input asp-for="Phone" type="tel" />
 
 				<label asp-for="Message"></label>
 				<textarea asp-for="Message" cols="55" rows="10"></textarea>
