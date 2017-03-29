@@ -40,7 +40,6 @@
 
 		figure {
 			@include column;
-			margin-top: $line-height * 1em;
 
 			@include breakpoint(large) {
 				@include column($cols: 6);

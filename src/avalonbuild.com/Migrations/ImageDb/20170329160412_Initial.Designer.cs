@@ -8,7 +8,7 @@ using avalonbuild.com.Data;
 namespace avalonbuild.com.Migrations.ImageDb
 {
     [DbContext(typeof(ImageDbContext))]
-    [Migration("20170318031447_Initial")]
+    [Migration("20170329160412_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

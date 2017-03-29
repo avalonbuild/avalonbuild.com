@@ -145,6 +145,64 @@
 }
 
 //
+// Testimonials
+//
+
+#testimonials {
+	background-color: #f8fafc;
+
+	ul {
+		position: relative;
+		margin: 0;
+		padding: 0;
+		height: 7em;
+		list-style: none;
+	}
+
+	li {
+		position: absolute;
+		top: 50%;
+		width: 100%;
+		margin: 0;
+		padding: 0;
+		opacity: 0;
+		text-align: center;
+		font-size: 1em;
+		font-style: italic;
+		animation: rotateWordsFirst 30s linear infinite 0s;
+		transform: translateY(-50%);
+
+		&:nth-child(2) {
+			animation-delay: 5s;
+		}
+		&:nth-child(3) {
+			animation-delay: 10s;
+		}
+		&:nth-child(4) {
+			animation-delay: 15s;
+		}
+		&:nth-child(5) {
+			animation-delay: 20s;
+		}
+		&:nth-child(6) {
+			animation-delay: 25s;
+		}
+
+		@include breakpoint(large) {
+			font-size: 1.5em;
+        }
+	}
+}
+
+@keyframes rotateWordsFirst {
+    0% { opacity: 0; animation-timing-function: ease-in; }
+	4% { opacity: 1;}
+    12% { opacity: 1;}
+    18% { opacity: 0; }
+    100% { opacity: 0; }
+}
+
+//
 // About
 //
 
@@ -173,7 +231,10 @@
 //
 
 #services {
-	background-color: #f8fafc;
+
+	a {
+		color: inherit;
+	}
 
 	ul {
 		list-style: none;

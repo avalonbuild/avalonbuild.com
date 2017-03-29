@@ -8,7 +8,7 @@ using avalonbuild.com.Data;
 namespace avalonbuild.com.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20170318031432_Initial")]
+    [Migration("20170329160353_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
