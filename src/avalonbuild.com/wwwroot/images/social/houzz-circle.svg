@@ -5,9 +5,9 @@
 	 y="0px" width="128px" height="128px" viewBox="0 0 128 128" enable-background="new 0 0 128 128" xml:space="preserve">
 <circle id="Circle" fill="#888888" cx="63" cy="63" r="63"/>
 <g id="Houzz">
-	<path id="path30" fill="#FFFFFF" d="M29.731,62.783v38.44l33.291-19.228L29.734,62.783H29.731"/>
-	<polygon fill="#FFFFFF" points="96.312,24.339 63.021,43.566 63.021,81.995 63.021,120.442 96.312,101.221 96.312,62.783 
-		96.312,62.783 	"/>
-	<path id="path14" fill="#FFFFFF" d="M63.021,5.122L29.73,24.339v38.447l33.291-19.223V5.122"/>
+	<path id="path30" fill="#FFFFFF" d="M36.389,62.783v30.752l26.633-15.382l-26.63-15.37H36.389"/>
+	<polygon fill="#FFFFFF" points="89.654,32.028 63.021,47.409 63.021,78.152 63.021,108.91 89.654,93.533 89.654,62.783 
+		89.654,62.783 	"/>
+	<path id="path14" fill="#FFFFFF" d="M63.021,16.654L36.388,32.028v30.758l26.633-15.378V16.654"/>
 </g>
 </svg>
