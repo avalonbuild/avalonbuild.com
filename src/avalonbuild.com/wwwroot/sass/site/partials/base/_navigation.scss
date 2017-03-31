@@ -92,23 +92,16 @@
 	color: #fff;
 	text-align: center;
 	border-radius: .25em;
-	background: rgba(0,0,0,0.3);
+	background-color: rgba(0,0,0,0.3);
+
+    width: 1em;
+    height: 1em;
+    background-image: url(/images/hamburger-icon.svg);
+    background-size: 75%;
+    background-position: center center;
+    background-repeat: no-repeat;
 
 	&:hover {
-		background: rgba(0,0,0,0.5);
-	}
-
-	i {
-		display: block;
-		margin: 0 auto;
-		padding: 0;
-		width: 1em;
-		line-height: 1;
-		font-style: normal;
-		transition: all 0.1s;
-	}
-
-	i.open {
-		transform: rotate(45deg);
+		background-color: rgba(0,0,0,0.5);
 	}
 }

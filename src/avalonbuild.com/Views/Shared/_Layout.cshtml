@@ -55,7 +55,7 @@
 
         <nav id="nav" role="navigation">
 
-            <a id="nav-button" href="#"><i>+</i></a>
+            <a id="nav-button" href="#"></a>
             @Html.Partial("_Navigation")
 
         </nav>
@@ -111,9 +111,10 @@
 			$(function () {
 
 			    $("#nav-button").click(function (e) {
+
                     e.preventDefault();
-					$("#nav-button i").toggleClass("open");
 					$("#nav ul").toggleClass("open");
+
 				});
 
 			});
