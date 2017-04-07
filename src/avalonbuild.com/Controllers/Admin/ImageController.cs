@@ -55,13 +55,18 @@ namespace avalonbuild.com.Controllers
         {
             if (!ModelState.IsValid || Request.Form.Files.Count != 1)
             {
-                return BadRequest("Image name and file are required.");
+                return BadRequest("Image file is required.");
+            }
+
+            if (model.Name == null || model.Name == "")
+            {
+                model.Name = Request.Form.Files[0].FileName;
             }
 
             var file = new Models.File
             {
                 Name = "images/" + model.Name,
-                MimeType = "image/png"
+                MimeType = Request.Form.Files[0].ContentType
             };
 
             using (var memoryStream = new MemoryStream())
