@@ -108,7 +108,7 @@
 
 				$.ajax({
 					type: "POST",
-					url: '@Url.Action("Add","Image")',
+					url: '@Url.Action("Create","Image")',
 					contentType: false,
 					processData: false,
 					data: data,
@@ -131,13 +131,13 @@
 			{
 				var list = $('#images-list');
 
-				$.getJSON('@Url.Action("Get","Image")', function (data) {
+				$.getJSON('@Url.Action("GetAll","Image")', function (data) {
 
 					list.empty();
 					$.each(data, function(i, field){
 						var li = $('<li>');
 						var img = $('<img src="/file/' + field.fileName + '"/>');
-						var del = $('<a class="delete" title="Delete Image" href="/admin/images/delete/' + field.id + '"></a>');
+						var del = $('<a class="delete" title="Delete Image" href="/api/image/' + field.id + '"></a>');
 
 						del.click(function (evt) {
 							evt.preventDefault();
@@ -155,12 +155,10 @@
 			function DeleteImage(url)
 			{
 				$.ajax({
+					type: 'DELETE',
 					url: url,
 					success: function(data, textStatus, jqXHR) {
 						PopulateImages();
-					},
-					error: function (jqXHR, textStatus, errorThrown) {
-						alert("error deleting image id:" + id);
 					}
 				});
 			}
@@ -207,6 +205,7 @@
 				var alert = $("#images-alert");
 				alert.removeClass("show");
 			}
+			
 		</script>
 
 }

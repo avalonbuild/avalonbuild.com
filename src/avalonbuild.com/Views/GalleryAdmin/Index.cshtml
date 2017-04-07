@@ -112,7 +112,7 @@
 						else
 							img = $('<img src="/images/galleries/default.jpg"/>');
 
-						var del = $('<a class="delete" title="Delete Gallery" href="/admin/galleries/delete/' + field.id + '"></a>');
+						var del = $('<a class="delete" title="Delete Gallery" href="/api/gallery/' + field.id + '"></a>');
 
 						del.click(function (evt) {
 							evt.preventDefault();
@@ -131,7 +131,7 @@
 			{
 				var list = $('#images-list');
 
-				$.getJSON('@Url.Action("Get","Image")', function (data) {
+				$.getJSON('@Url.Action("GetAll","Image")', function (data) {
 
 					list.empty();
 
@@ -164,9 +164,6 @@
 					url: url,
 					success: function(data, textStatus, jqXHR) {
 						GetGalleries();
-					},
-					error: function (jqXHR, textStatus, errorThrown) {
-						alert("error deleting gallery id:" + id);
 					}
 				});
 			}

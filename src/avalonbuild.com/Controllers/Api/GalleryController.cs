@@ -11,7 +11,6 @@ using System;
 using System.Threading.Tasks;
 using avalonbuild.com.Data;
 using avalonbuild.com.Models;
-using avalonbuild.com.ViewModels;
 
 namespace avalonbuild.com.Controllers.Api
 {
@@ -24,7 +23,7 @@ namespace avalonbuild.com.Controllers.Api
         public GalleryController(ImageDbContext images, ILoggerFactory loggerFactory)
         {
             _images = images;
-            _logger = loggerFactory.CreateLogger<ImageController>();
+            _logger = loggerFactory.CreateLogger<GalleryController>();
         }
 
         [HttpGet]
@@ -84,10 +83,9 @@ namespace avalonbuild.com.Controllers.Api
             return Json(message);
         }
 
-        [Route("/admin/galleries/delete/{id}")]
-        [HttpDelete]
+        [HttpDelete("{id}")]
         [Authorize]
-        public async Task<IActionResult> delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var gallery = await _images.Galleries.Include(g => g.Images).FirstOrDefaultAsync(i => i.ID == id);
 

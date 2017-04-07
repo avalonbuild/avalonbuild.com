@@ -1,14 +1,7 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Microsoft.Net.Http.Headers;
-using System.Collections.Generic;
-using System;
-using System.IO;
 using System.Threading.Tasks;
 using avalonbuild.com.Data;
 
