@@ -21,6 +21,8 @@
 
 		<a data-dialog="addimagedialog" class="button trigger">Add Image</a>
 
+		<div id="images-alert" class="alert success"></div>
+
 		<ul id="images-list"></ul>
 
 	</div>
@@ -44,16 +46,6 @@
 					<div class="field">
 						<label asp-for="Name"></label>
 						<input asp-for="Name"/>
-					</div>
-
-					<div class="field">
-						<label asp-for="Title"></label>
-						<input asp-for="Title"/>
-					</div>
-
-					<div class="field">
-						<label asp-for="Description"></label>
-						<input asp-for="Description"/>
 					</div>
 
 					<div class="field">
@@ -82,11 +74,14 @@
 
 		<script>
 
+			var dlg;
+
 			(function() {
 
 				var dlgtrigger = document.querySelector( '[data-dialog]' ),
-					somedialog = document.getElementById( dlgtrigger.getAttribute( 'data-dialog' ) ),
-					dlg = new DialogFx( somedialog );
+					somedialog = document.getElementById( dlgtrigger.getAttribute( 'data-dialog' ) );
+
+				dlg = new DialogFx( somedialog );
 
 				dlgtrigger.addEventListener( 'click', dlg.toggle.bind(dlg) );
 
@@ -172,16 +167,15 @@
 
 			function ImageUploadSuccess(message)
 			{
-				var response = $("#add-image-response");
-				response.removeClass("error");
-				response.addClass("success show");
-				response.html(message);
+				setAlert(message, "success");
 
 				var inputs = $("#add-image-form :input:not([type='hidden'])");
 
 				$.each(inputs, function (key, input) {
 					input.value = null;
 				});
+
+				dlg.toggle();
 			}
 
 			function ImageUploadError(message)
@@ -193,6 +187,26 @@
 				$("#add-image-response").html(message);
 			}
 
+			function setAlert(message, type)
+			{
+				var alert = $("#images-alert");
+
+				alert.removeClass("success");
+				alert.removeClass("error");
+
+				alert.addClass("show");
+				alert.addClass(type);
+
+				alert.html(message);
+
+				setTimeout(hideAlert, 5000);
+			}
+
+			function hideAlert(message)
+			{
+				var alert = $("#images-alert");
+				alert.removeClass("show");
+			}
 		</script>
 
 }

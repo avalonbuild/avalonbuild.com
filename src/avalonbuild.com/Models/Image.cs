@@ -12,8 +12,7 @@ namespace avalonbuild.com.Models
 
 		public int ID { get; set; }
 
-        [Required]
-        [Display(Name = "Name")]
+        [Display(Name = "Name (optional)")]
         public string Name { get; set; }
 
         [Display(Name = "Title")]
