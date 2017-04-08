@@ -19,15 +19,15 @@
 
 		</header>
 
-		<a data-dialog="addgallerydialog" class="button">Add Gallery</a>
+		<a id="add-gallery-button" data-dialog="gallery-dialog" class="button">Add Gallery</a>
 
-		<div id="galleries-alert" class="alert success"></div>
+		<div id="page-alert" class="alert"></div>
 
 		<ul id="galleries-list"></ul>
 
 	</div>
 
-	<div id="addgallerydialog" class="dialog">
+	<div id="gallery-dialog" class="dialog">
 
 		<div class="dialog__overlay"></div>
 
@@ -37,11 +37,11 @@
 
 			<div id="gallery-add">
 
-				<h2>Add a Gallery</h2>
+				<h2 id="dialog-title"></h2>
 
-				<form id="add-gallery-form" method="post" asp-antiforgery="true">
+				<form id="gallery-form" method="post" asp-antiforgery="true">
 
-					<div id="add-gallery-response" class="alert error"></div>
+					<div id="dialog-alert" class="alert"></div>
 
 					<div class="field">
 						<label asp-for="Title"></label>
@@ -56,7 +56,7 @@
 					<ul id="images-list"></ul>
 
 					<div class="buttons">
-						<a id="create" class="button">Add Gallery</a>
+						<a id="dialog-submit" class="button">Add Gallery</a>
 					</div>
 
 				</form>
@@ -84,26 +84,28 @@
 
 				dlg = new DialogFx( somedialog );
 
-				dlgtrigger.addEventListener( 'click', dlg.toggle.bind(dlg) );
+				//dlgtrigger.addEventListener( 'click', dlg.toggle.bind(dlg) );
 
-				GetGalleries();
-				GetImages();
+				PopulateGalleries();
+				PopulateImages();
 
 			})();
 
-			$("#create").click(GalleryAdd);
+			$("#add-gallery-button").click(ShowAddGallery);
 
-			function GetGalleries()
+			function PopulateGalleries()
 			{
 				var list = $('#galleries-list');
 
-				$.getJSON('@Url.Action("GetAll","Gallery")', function (data) {
+				$.getJSON('/api/gallery', function (data) {
 
 					list.empty();
 
 					$.each(data, function(i, field){
 
 						var li = $('<li data-gallery-id="' + field.id + '">');
+
+						li.data(field);
 
 						var img;
 
@@ -112,11 +114,16 @@
 						else
 							img = $('<img src="/images/galleries/default.jpg"/>');
 
-						var del = $('<a class="delete" title="Delete Gallery" href="/api/gallery/' + field.id + '"></a>');
+						var del = $('<a class="delete" title="Delete Gallery"></a>');
+
+						img.click(function (evt) {
+							evt.preventDefault();
+							ShowEditGallery($(this).parent().data());
+						});
 
 						del.click(function (evt) {
 							evt.preventDefault();
-							DeleteGallery($(this).attr("href"));
+							DeleteGallery($(this).parent().data());
 						});
 
 						li.append(img);
@@ -127,7 +134,7 @@
 				});
 			}
 
-			function GetImages()
+			function PopulateImages()
 			{
 				var list = $('#images-list');
 
@@ -157,20 +164,49 @@
 				});
 			}
 
-			function DeleteGallery(url)
+			function ShowAddGallery()
 			{
-				$.ajax({
-					type: 'DELETE',
-					url: url,
-					success: function(data, textStatus, jqXHR) {
-						GetGalleries();
-					}
-				});
+				$("#dialog-title").html("Add a Gallery");
+
+				var form = $("#gallery-form");
+
+				form.find('input[name="Title"]').val("");
+				form.find('input[name="Description"]').val("");
+
+				ClearSelectedImages();
+
+				var submit = $("#dialog-submit");
+
+				submit.html("Add Gallery");
+				submit.unbind().click(CreateGallery);
+
+				ToggleDialog();
 			}
 
-			function GalleryAdd()
+			function ShowEditGallery(gallery)
 			{
-				var form = $("#add-gallery-form");
+				$("#dialog-title").html("Update a Gallery");
+
+				var form = $("#gallery-form");
+				form.data(gallery);
+
+				form.find('input[name="Title"]').val(gallery.title);
+				form.find('input[name="Description"]').val(gallery.description);
+
+				ClearSelectedImages();
+				SetSelectedImages(gallery);
+
+				var submit = $("#dialog-submit");
+
+				submit.html("Update Gallery");
+				submit.unbind().click(UpdateGallery);
+
+				ToggleDialog();
+			}
+
+			function CreateGallery()
+			{
+				var form = $("#gallery-form");
 				var token = form.find("input[name=__RequestVerificationToken]").val();
 
 				var datajson = {
@@ -183,7 +219,7 @@
 
 				$.ajax({
 					type: 'POST',
-					url: '@Url.Action("Create","Gallery")',
+					url: '/api/gallery',
 					headers: {
 						"RequestVerificationToken": token
 					},
@@ -191,61 +227,68 @@
 					dataType: "json",
 					data: JSON.stringify(datajson),
 					statusCode: {
-						200: function(data, textStatus, jqXHR) {
-							GalleryAddSuccess(data);
-							GetGalleries();
+						200: function(response, textStatus, jqXHR) {
+							SetPageAlert(response, "success");
+							ToggleDialog();
+							PopulateGalleries();
 						},
 						400: function(jqXHR, textStatus, errorThrown) {
-							GalleryAddError(jqXHR.responseText);
+							SetDialogAlert(jqXHR.responseText, "error");
 						}
 					},
 					error: function (jqXHR, textStatus, errorThrown) {
-						GalleryAddError("Error adding gallery.");
+						SetDialogAlert("Error adding gallery.", "error");
 					}
 				});
 			}
 
-			function GalleryAddSuccess(message)
+			function UpdateGallery()
 			{
-				setAlert(message, "success");
+				var form = $("#gallery-form");
+				var token = form.find("input[name=__RequestVerificationToken]").val();
 
-				var inputs = $("#add-gallery-form :input:not([type='hidden'])");
+				var datajson = {
+					name: form.find('input[name="Title"]').val().replace(/ /g, '-').toLowerCase(),
+					title: form.find('input[name="Title"]').val(),
+					description: form.find('input[name="Description"]').val()
+				}
 
-				$.each(inputs, function (key, input) {
-					input.value = null;
+				datajson.images = GetSelectedImages();
+				
+				$.ajax({
+					type: 'PUT',
+					url: '/api/gallery/' + form.data().id,
+					headers: {
+						"RequestVerificationToken": token
+					},
+					contentType: "application/json; charset=utf-8",
+					dataType: "json",
+					data: JSON.stringify(datajson),
+					statusCode: {
+						200: function(response, textStatus, jqXHR) {
+							SetPageAlert(response, "success");
+							ToggleDialog();
+							PopulateGalleries();
+						},
+						400: function(jqXHR, textStatus, errorThrown) {
+							SetDialogAlert(jqXHR.responseText, "error");
+						}
+					},
+					error: function (jqXHR, textStatus, errorThrown) {
+						SetDialogAlert("Error updating gallery.", "error");
+					}
 				});
-
-				ClearSelectedImages();
-
-				dlg.toggle();
 			}
 
-			function GalleryAddError(message)
+			function DeleteGallery(gallery)
 			{
-				var response = $("#add-gallery-response");
-				response.addClass("show");
-				response.html(message);
-			}
-
-			function setAlert(message, type)
-			{
-				var alert = $("#galleries-alert");
-
-				alert.removeClass("success");
-				alert.removeClass("error");
-
-				alert.addClass("show");
-				alert.addClass(type);
-
-				alert.html(message);
-
-				setTimeout(hideAlert, 5000);
-			}
-
-			function hideAlert(message)
-			{
-				var alert = $("#galleries-alert");
-				alert.removeClass("show");
+				$.ajax({
+					type: 'DELETE',
+					url: '/api/gallery/' + gallery.id,
+					success: function(data, textStatus, jqXHR) {
+						PopulateGalleries();
+					}
+				});
 			}
 
 			function GetSelectedImages()
@@ -260,6 +303,27 @@
 				});
 
 				return images;
+
+			}
+
+			function SetSelectedImages(gallery)
+			{
+				$.each($("#images-list li"), function (key, value) {
+
+					var id = $(this).attr("data-image-id");
+
+					var selected = false;
+
+					for (i = 0; i < gallery.images.length; i++)
+					{
+						if (id == gallery.images[i].id)
+							selected = true;
+					}
+
+					if (selected)
+						$(this).attr("data-selected", "true");
+
+				});				
 			}
 
 			function ClearSelectedImages()
@@ -269,6 +333,53 @@
 					$(this).removeAttr("data-selected");
 
 				});
+			}
+
+			function ToggleDialog()
+			{
+				dlg.toggle();
+			}
+
+			function SetPageAlert(message, type)
+			{
+				var alert = $("#page-alert");
+
+				alert.removeClass("success");
+				alert.removeClass("error");
+
+				alert.addClass("show");
+				alert.addClass(type);
+
+				alert.html(message);
+
+				setTimeout(HidePageAlert, 5000);
+			}
+
+			function HidePageAlert(message)
+			{
+				var alert = $("#page-alert");
+				alert.removeClass("show");
+			}
+
+			function SetDialogAlert(message, type)
+			{
+				var alert = $("#dialog-alert");
+
+				alert.removeClass("success");
+				alert.removeClass("error");
+
+				alert.addClass("show");
+				alert.addClass(type);
+
+				alert.html(message);
+
+				setTimeout(HideDialogAlert, 5000);
+			}
+
+			function HideDialogAlert(message)
+			{
+				var alert = $("#dialog-alert");
+				alert.removeClass("show");
 			}
 
 		</script>
