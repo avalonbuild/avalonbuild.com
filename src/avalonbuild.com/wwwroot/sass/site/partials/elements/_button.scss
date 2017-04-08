@@ -16,7 +16,7 @@
     text-shadow: none;
 	transition: all, .1s;
     user-select: none;
-    cursor: default;
+    cursor: pointer;
 
 	&:hover {
         background-color: $primary-color;

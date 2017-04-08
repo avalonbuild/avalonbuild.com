@@ -23,6 +23,7 @@
 		li {
 			position: relative;
 			margin-bottom: $line-height * 1em;
+			cursor: pointer;
 
 			@include column;
 
@@ -77,6 +78,7 @@
 		font-weight: 400;
 		line-height: 1.25em;
 		vertical-align: middle;
+		cursor: pointer;
 
 		&::before {
 			content: '\00d7';
