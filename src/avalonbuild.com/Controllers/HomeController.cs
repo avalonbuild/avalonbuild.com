@@ -22,12 +22,6 @@ namespace avalonbuild.com.Controllers
             return View();
         }
 
-        [Route("/services")]
-        public IActionResult Services()
-        {
-            return View();
-        }
-
         [Route("/galleries")]
         public async Task<IActionResult> Galleries()
         {
