@@ -139,8 +139,41 @@ body,
 //
 
 #footer {
-	padding: $line-height * 1em 0;
-	background-color: #f2f3f5;
-	text-align: center;
-	//@include clear-children;
+
+	section {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		padding: $line-height * 1em 0;
+	}
+
+	address {
+		box-sizing: border-box;
+		margin: $line-height * .5em 2em;
+		text-align: left;
+		font-size: .75em;
+		font-style: normal;
+
+		@include breakpoint(small) {
+			margin: 0 2em;
+		}
+
+		@include breakpoint(medium) {
+			margin: 0 4em;
+		}
+	}
+
+	#footer-social {
+		background-color: #f2f3f5;
+	}
+
+	#footer-contact {
+		background-color: #15152b;
+		color: #fff;
+
+		a {
+			color: #fbb03b;
+			text-decoration: underline;
+		}
+	}
 }
