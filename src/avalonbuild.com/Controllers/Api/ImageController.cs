@@ -88,7 +88,7 @@ namespace avalonbuild.com.Controllers.Api
             }
             catch (Exception ex)
             {
-                return BadRequest("Add image failed: " + ex.Message);
+                return BadRequest("Add image failed: " + ex.Message + " - Inner Exception: " + ex.InnerException.Message);
             }
         }
 
