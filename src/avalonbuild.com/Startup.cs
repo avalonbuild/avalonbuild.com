@@ -154,6 +154,14 @@ namespace avalonbuild.com
                 app.UseExceptionHandler("/error");
             }
 
+            // Run database migrations at startup to allow continuous delivery without DB intervention
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                serviceScope.ServiceProvider.GetService<ApplicationDbContext>().Database.Migrate();
+                serviceScope.ServiceProvider.GetService<FileDbContext>().Database.Migrate();
+                serviceScope.ServiceProvider.GetService<ImageDbContext>().Database.Migrate();
+            }
+
             app.UseStatusCodePagesWithReExecute("/error/{0}");
 
             app.UseStaticFiles();
