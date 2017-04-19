@@ -49,41 +49,47 @@ namespace avalonbuild.com.Controllers.Api
             {
                 return BadRequest("Image file is required.");
             }
+            try {
 
-            if (model.Name == null || model.Name == "")
-            {
-                model.Name = Request.Form.Files[0].FileName;
+                if (model.Name == null || model.Name == "")
+                {
+                    model.Name = Request.Form.Files[0].FileName;
+                }
+
+                var file = new Models.File
+                {
+                    Name = "images/" + model.Name,
+                    MimeType = Request.Form.Files[0].ContentType
+                };
+
+                using (var memoryStream = new MemoryStream())
+                {
+                    await Request.Form.Files[0].CopyToAsync(memoryStream);
+                    file.Data = memoryStream.ToArray();
+                }
+
+                var fileresult = _files.Files.Add(file);
+                await _files.SaveChangesAsync();
+
+                var image = new Models.Image
+                {
+                    Name = model.Name,
+                    Title = model.Title,
+                    Description = model.Description,
+                    FileName = file.Name
+                };
+
+                var imageresult = _images.Images.Add(image);
+                await _images.SaveChangesAsync();
+
+                string message = $"Image uploaded successfully.";
+
+                return Json(message);
             }
-
-            var file = new Models.File
+            catch (Exception ex)
             {
-                Name = "images/" + model.Name,
-                MimeType = Request.Form.Files[0].ContentType
-            };
-
-            using (var memoryStream = new MemoryStream())
-            {
-                await Request.Form.Files[0].CopyToAsync(memoryStream);
-                file.Data = memoryStream.ToArray();
+                return BadRequest("Add image failed: " + ex.Message);
             }
-
-            var fileresult = _files.Files.Add(file);
-            await _files.SaveChangesAsync();
-
-            var image = new Models.Image
-            {
-                Name = model.Name,
-                Title = model.Title,
-                Description = model.Description,
-                FileName = file.Name
-            };
-
-            var imageresult = _images.Images.Add(image);
-            await _images.SaveChangesAsync();
-
-            string message = $"Image uploaded successfully.";
-
-            return Json(message);
         }
 
         [HttpDelete("{id}")]
