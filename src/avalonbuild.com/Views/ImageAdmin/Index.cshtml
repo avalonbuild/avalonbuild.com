@@ -19,15 +19,15 @@
 
 		</header>
 
-		<a data-dialog="addimagedialog" class="button trigger">Add Image</a>
+		<a id="add-image-button" data-dialog="image-dialog" class="button trigger">Add Image</a>
 
-		<div id="images-alert" class="alert success"></div>
+		<div id="page-alert" class="alert"></div>
 
 		<ul id="images-list"></ul>
 
 	</div>
 
-	<div id="addimagedialog" class="dialog">
+	<div id="image-dialog" class="dialog">
 
 		<div class="dialog__overlay"></div>
 
@@ -39,9 +39,9 @@
 
 				<h2>Add an Image</h2>
 
-				<form id="add-image-form" method="post" asp-antiforgery="true" enctype="multipart/form-data">
+				<form id="image-form" method="post" asp-antiforgery="true" enctype="multipart/form-data">
 
-					<div id="add-image-response" class="alert">test</div>
+					<div id="dialog-alert" class="alert"></div>
 
 					<div class="field">
 						<label asp-for="Name"></label>
@@ -54,7 +54,7 @@
 					</div>
 
 					<div class="buttons">
-						<a id="upload" class="button">Add Image</a>
+						<a id="dialog-submit" class="button">Add Image</a>
 					</div>
 
 				</form>
@@ -83,14 +83,16 @@
 
 				dlg = new DialogFx( somedialog );
 
-				dlgtrigger.addEventListener( 'click', dlg.toggle.bind(dlg) );
+				//dlgtrigger.addEventListener( 'click', dlg.toggle.bind(dlg) );
 
 				PopulateImages();
 
 			})();
 
-			$("#upload").click(function (evt) {
+			$("#add-image-button").click(ShowAddImage);
 
+			function CreateImage()
+			{
 				//add the file(s)
 				var fileUpload = $("#file").get(0);
 				var files = fileUpload.files;
@@ -101,7 +103,7 @@
 				}
 
 				//add the data
-				var postData = $('#add-image-form :input');
+				var postData = $('#image-form :input');
 				$.each(postData, function (key, input) {
 					data.append(input.name, input.value);
 				});
@@ -113,19 +115,20 @@
 					processData: false,
 					data: data,
 					statusCode: {
-						200: function(data, textStatus, jqXHR) {
-							ImageUploadSuccess(data);
+						200: function(response, textStatus, jqXHR) {
+							SetPageAlert(response, "success");
+							ToggleDialog();
 							PopulateImages();
 						},
 						400: function(jqXHR, textStatus, errorThrown) {
-							ImageUploadError(jqXHR.responseText);
+							SetDialogAlert(jqXHR.responseText, "error");
 						}
 					},
 					error: function (jqXHR, textStatus, errorThrown) {
-						ImageUploadError("Error uploading image.");
+						SetDialogAlert("Error uploading image.", "error");
 					}
 				});
-			});
+			}
 
 			function PopulateImages()
 			{
@@ -152,6 +155,22 @@
 				});
 			}
 
+			function ShowAddImage()
+			{
+				$("#dialog-title").html("Add an Image");
+
+				var form = $("#image-form");
+
+				form.find('input[name="Title"]').val("");
+
+				var submit = $("#dialog-submit");
+
+				submit.html("Add Image");
+				submit.unbind().click(CreateImage);
+
+				ToggleDialog();
+			}
+
 			function DeleteImage(url)
 			{
 				$.ajax({
@@ -165,29 +184,25 @@
 
 			function ImageUploadSuccess(message)
 			{
-				setAlert(message, "success");
+				SetPageAlert(message, "success");
 
-				var inputs = $("#add-image-form :input:not([type='hidden'])");
+				var inputs = $("#image-form :input:not([type='hidden'])");
 
 				$.each(inputs, function (key, input) {
 					input.value = null;
 				});
 
+				ToggleDialog();
+			}
+
+			function ToggleDialog()
+			{
 				dlg.toggle();
 			}
 
-			function ImageUploadError(message)
+			function SetPageAlert(message, type)
 			{
-				var response = $("#add-image-response");
-				response.removeClass("success");
-				response.addClass("error show");
-				response.html(message);
-				$("#add-image-response").html(message);
-			}
-
-			function setAlert(message, type)
-			{
-				var alert = $("#images-alert");
+				var alert = $("#page-alert");
 
 				alert.removeClass("success");
 				alert.removeClass("error");
@@ -197,15 +212,36 @@
 
 				alert.html(message);
 
-				setTimeout(hideAlert, 5000);
+				setTimeout(HidePageAlert, 5000);
 			}
 
-			function hideAlert(message)
+			function HidePageAlert(message)
 			{
-				var alert = $("#images-alert");
+				var alert = $("#page-alert");
 				alert.removeClass("show");
 			}
-			
+
+			function SetDialogAlert(message, type)
+			{
+				var alert = $("#dialog-alert");
+
+				alert.removeClass("success");
+				alert.removeClass("error");
+
+				alert.addClass("show");
+				alert.addClass(type);
+
+				alert.html(message);
+
+				setTimeout(HideDialogAlert, 5000);
+			}
+
+			function HideDialogAlert(message)
+			{
+				var alert = $("#dialog-alert");
+				alert.removeClass("show");
+			}
+
 		</script>
 
 }
