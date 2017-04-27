@@ -49,18 +49,28 @@ namespace avalonbuild.com.Controllers.Api
             {
                 return BadRequest("Image file is required.");
             }
+
+            // filename is optional, if not provided default to the filename uploaded
+            if (model.Name == null || model.Name == "")
+            {
+                model.Name = Request.Form.Files[0].FileName;
+            }
+
+            var file = new Models.File
+            {
+                Name = "images/" + model.Name,
+                MimeType = Request.Form.Files[0].ContentType
+            };
+
+            var image = new Models.Image
+            {
+                Name = model.Name,
+                Title = model.Title,
+                Description = model.Description,
+                FileName = file.Name
+            };
+
             try {
-
-                if (model.Name == null || model.Name == "")
-                {
-                    model.Name = Request.Form.Files[0].FileName;
-                }
-
-                var file = new Models.File
-                {
-                    Name = "images/" + model.Name,
-                    MimeType = Request.Form.Files[0].ContentType
-                };
 
                 using (var memoryStream = new MemoryStream())
                 {
@@ -68,28 +78,27 @@ namespace avalonbuild.com.Controllers.Api
                     file.Data = memoryStream.ToArray();
                 }
 
-                var fileresult = _files.Files.Add(file);
+                _files.Files.Add(file);
+
                 await _files.SaveChangesAsync();
-
-                var image = new Models.Image
-                {
-                    Name = model.Name,
-                    Title = model.Title,
-                    Description = model.Description,
-                    FileName = file.Name
-                };
-
-                var imageresult = _images.Images.Add(image);
-                await _images.SaveChangesAsync();
-
-                string message = $"Image uploaded successfully.";
-
-                return Json(message);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return BadRequest("Add image failed: " + ex.Message + " - Inner Exception: " + ex.InnerException.Message);
+                return BadRequest("Add image failed, duplicate filename exists.");
             }
+
+            try {
+
+                _images.Images.Add(image);
+
+                await _images.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return BadRequest("Add image failed.");
+            }
+
+            return Json("Image uploaded successfully.");
         }
 
         [HttpDelete("{id}")]

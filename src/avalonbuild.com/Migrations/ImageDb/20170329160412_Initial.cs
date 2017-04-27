@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace avalonbuild.com.Migrations.ImageDb
 {
@@ -13,7 +14,8 @@ namespace avalonbuild.com.Migrations.ImageDb
                 columns: table => new
                 {
                     ID = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("Sqlite:Autoincrement", true)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Description = table.Column<string>(nullable: true),
                     FileName = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: true),
@@ -29,7 +31,8 @@ namespace avalonbuild.com.Migrations.ImageDb
                 columns: table => new
                 {
                     ID = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("Sqlite:Autoincrement", true)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Description = table.Column<string>(nullable: true),
                     FileName = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: false),
