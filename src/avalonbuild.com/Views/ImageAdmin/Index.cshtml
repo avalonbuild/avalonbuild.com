@@ -54,7 +54,12 @@
 					</div>
 
 					<div class="buttons">
-						<a id="dialog-submit" class="button">Add Image</a>
+						<div class="button-progress-wrap">
+							<button id="dialog-submit" class="button">Add Image</button>
+							<div id="progress">
+								<span id="progress-bar"></span>
+							</div>
+						</div>
 					</div>
 
 				</form>
@@ -91,8 +96,12 @@
 
 			$("#add-image-button").click(ShowAddImage);
 
-			function CreateImage()
+			function CreateImage(e)
 			{
+				e.preventDefault();
+
+				$("#dialog-submit").prop("disabled",true);
+
 				//add the file(s)
 				var fileUpload = $("#file").get(0);
 				var files = fileUpload.files;
@@ -109,6 +118,16 @@
 				});
 
 				$.ajax({
+					xhr: function(){
+						var xhr = new window.XMLHttpRequest();
+
+						//Upload progress
+						xhr.upload.addEventListener("loadstart", UploadStart, false);
+						xhr.upload.addEventListener("progress", UploadProgress, false);
+						xhr.upload.addEventListener("load", UploadComplete, false);
+
+						return xhr;
+					},
 					type: "POST",
 					url: '@Url.Action("Create","Image")',
 					contentType: false,
@@ -117,17 +136,44 @@
 					statusCode: {
 						200: function(response, textStatus, jqXHR) {
 							SetPageAlert(response, "success");
-							ToggleDialog();
+							CloseDialog();
+							$("#dialog-submit").prop("disabled",false);
 							PopulateImages();
 						},
 						400: function(jqXHR, textStatus, errorThrown) {
 							SetDialogAlert(jqXHR.responseText, "error");
+							$("#dialog-submit").prop("disabled",false);
 						}
 					},
 					error: function (jqXHR, textStatus, errorThrown) {
 						SetDialogAlert("Error uploading image.", "error");
+						$("#dialog-submit").prop("disabled",false);
 					}
 				});
+			}
+
+			function UploadStart(event)
+			{
+				console.log("Upload started");
+				$("#progress").show();
+			}
+
+			function UploadComplete(event)
+			{
+				console.log("Upload complete");
+				$("#progress").hide();
+			}
+
+			function UploadProgress(event)
+			{
+				if (event.lengthComputable) {
+
+					var percentComplete = event.loaded / event.total;
+
+					$("#progress-bar").width(percentComplete * 100 + '%');
+
+					console.log("Percent uploaded: " + percentComplete * 100 + "% - " + event.loaded + " / " + event.total);
+				}
 			}
 
 			function PopulateImages()
@@ -144,6 +190,7 @@
 
 						del.click(function (evt) {
 							evt.preventDefault();
+							$(this).parent().find("img").fadeTo(100, 0.4);
 							DeleteImage($(this).attr("href"));
 						});
 
@@ -169,7 +216,7 @@
 				submit.html("Add Image");
 				submit.unbind().click(CreateImage);
 
-				ToggleDialog();
+				OpenDialog();
 			}
 
 			function DeleteImage(url)
@@ -193,12 +240,17 @@
 					input.value = null;
 				});
 
-				ToggleDialog();
+				CloseDialog();
 			}
 
-			function ToggleDialog()
+			function OpenDialog()
 			{
-				dlg.toggle();
+				dlg.open();
+			}
+
+			function CloseDialog()
+			{
+				dlg.close();
 			}
 
 			function SetPageAlert(message, type)

@@ -12,6 +12,31 @@
 	margin: $line-height * 1em 0;
 }
 
+.button-progress-wrap {
+	position: relative;
+	display: inline-block;
+}
+
+#progress {
+	position: absolute;
+	display: none;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	height: .5em;
+	background-color: $secondary-color;
+}
+
+#progress-bar {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	display: inline-block;
+	width: 50%;
+	background-color: $primary-color;
+}
+
 #images {
 
 	ul {

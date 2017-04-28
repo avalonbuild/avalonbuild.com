@@ -86,6 +86,77 @@
 		}
 	}
 
+	DialogFx.prototype.open = function() {
+
+		var self = this;
+
+		//operation in progress
+		this.inProgress = true;
+
+		if(!this.isEverOpen){
+			// callback the first time before to open
+			this.options.onFirstOpenDialog(this);
+			this.isEverOpen = true;
+		}
+
+		if(!this.isOpen) {
+			// callback before to open
+			this.options.onBeforeOpenDialog(this);
+
+			var this_this = this;
+
+			setTimeout(function(){
+				classie.add(this_this.el, 'dialog--open');
+
+				// callback on open
+				this_this.options.onOpenDialog(this_this);
+
+				/**
+				 * toggle operation in progress ended
+				 */
+				this_this.inProgress = false;
+
+			}, this.options.nDefaultTimeOpenDialog);
+
+			this.isOpen = true;
+		}
+
+	};
+
+	DialogFx.prototype.close = function() {
+
+		var self = this;
+
+		//operation in progress
+		this.inProgress = true;
+
+		if(this.isOpen){
+			// callback before to close
+			this.options.onBeforeCloseDialog(this);
+
+			var this_this = this;
+
+			setTimeout(function(){
+				classie.remove(this_this.el, 'dialog--open');
+				classie.add(self.el, 'dialog--close');
+
+				onEndAnimation(this_this.el.querySelector('.dialog__content'), function() {
+					classie.remove(self.el, 'dialog--close');
+				});
+
+				// callback on close
+				this_this.options.onCloseDialog(this_this);
+
+				/**
+				 * toggle operation in progress ended
+				 */
+				this_this.inProgress = false;
+			}, this.options.nDefaultTimeCloseDialog);
+		}
+
+		this.isOpen = false;
+	}
+
 	DialogFx.prototype.toggle = function() {
 		//the toggle can be executed when any other open / close operation is in progress
 		var self = this;
