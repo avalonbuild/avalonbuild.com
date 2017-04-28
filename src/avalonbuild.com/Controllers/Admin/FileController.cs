@@ -23,6 +23,7 @@ namespace avalonbuild.com.Controllers
         }
 
         [Route("/file/{*name}")]
+        [ResponseCache(Duration = 604800)]
         public async Task<IActionResult> Img(string name)
         {
             var file = await _files.Files.SingleOrDefaultAsync(i => i.Name == name);
