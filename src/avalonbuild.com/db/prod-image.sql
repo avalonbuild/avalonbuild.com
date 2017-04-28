@@ -12,7 +12,6 @@ GO
 CREATE TABLE [Galleries] (
     [ID] int NOT NULL IDENTITY,
     [Description] nvarchar(max),
-    [FileName] nvarchar(max),
     [Name] nvarchar(max),
     [Title] nvarchar(max),
     CONSTRAINT [PK_Galleries] PRIMARY KEY ([ID])
@@ -24,6 +23,7 @@ CREATE TABLE [Images] (
     [ID] int NOT NULL IDENTITY,
     [Description] nvarchar(max),
     [FileName] nvarchar(max),
+    [ThumbnailFileName] nvarchar(max),
     [Name] nvarchar(max) NOT NULL,
     [Title] nvarchar(max),
     CONSTRAINT [PK_Images] PRIMARY KEY ([ID])

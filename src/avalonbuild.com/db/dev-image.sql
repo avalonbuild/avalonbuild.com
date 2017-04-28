@@ -6,7 +6,6 @@
 CREATE TABLE "Galleries" (
     "ID" INTEGER NOT NULL CONSTRAINT "PK_Galleries" PRIMARY KEY AUTOINCREMENT,
     "Description" TEXT,
-    "FileName" TEXT,
     "Name" TEXT,
     "Title" TEXT
 );
@@ -15,6 +14,7 @@ CREATE TABLE "Images" (
     "ID" INTEGER NOT NULL CONSTRAINT "PK_Images" PRIMARY KEY AUTOINCREMENT,
     "Description" TEXT,
     "FileName" TEXT,
+    "ThumbnailFileName" TEXT,
     "Name" TEXT NOT NULL,
     "Title" TEXT
 );

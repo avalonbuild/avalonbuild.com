@@ -47,7 +47,14 @@
 						<a href="/gallery/@gallery.Name">
 
 							<figure>
-								<img src="/file/@gallery.Images[0].FileName" alt="@gallery.Title">
+								@if (gallery.Images.Count > 0)
+								{
+									<img src="/file/@gallery.Images[0].ThumbnailFileName" alt="@gallery.Title">
+								}
+								else
+								{
+									<img src="/images/galleries/default.jpg" alt="@gallery.Title">
+								}
 								<figcaption>
 									<h3>@gallery.Title</h3>
 								</figcaption>

@@ -135,7 +135,7 @@ namespace avalonbuild.com.Controllers.Api
 
             await _images.SaveChangesAsync();
 
-            return Json("Gallery updated successfully.");        
+            return Json("Gallery updated successfully.");
         }
 
         [Authorize]
@@ -162,7 +162,7 @@ namespace avalonbuild.com.Controllers.Api
                     Title = gallery.Title,
                     Description = gallery.Description
                 };
-                
+
                 foreach (var image in gallery.Images)
                 {
                     if (image.Image != null) {
@@ -172,13 +172,14 @@ namespace avalonbuild.com.Controllers.Api
                             Name = image.Image.Name,
                             Title = image.Image.Title,
                             Description = image.Image.Description,
-                            FileName = image.Image.FileName
+                            FileName = image.Image.FileName,
+                            ThumbnailFileName = image.Image.ThumbnailFileName
                         };
 
                         modelGallery.Images.Add(modelImage);
                     }
                 }
-                
+
                 return modelGallery;
         }
     }

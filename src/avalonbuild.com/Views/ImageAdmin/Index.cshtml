@@ -185,7 +185,7 @@
 					list.empty();
 					$.each(data, function(i, field){
 						var li = $('<li>');
-						var img = $('<img src="/file/' + field.fileName + '"/>');
+						var img = $('<img src="/file/' + field.thumbnailFileName + '"/>');
 						var del = $('<a class="delete" title="Delete Image" href="/api/image/' + field.id + '"></a>');
 
 						del.click(function (evt) {

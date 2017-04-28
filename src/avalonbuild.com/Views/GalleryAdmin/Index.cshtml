@@ -110,7 +110,7 @@
 						var img;
 
 						if (field.images.length > 0)
-							img = $('<img src="/file/' + field.images[0].fileName + '"/>');
+							img = $('<img src="/file/' + field.images[0].thumbnailFileName + '"/>');
 						else
 							img = $('<img src="/images/galleries/default.jpg"/>');
 
@@ -145,7 +145,7 @@
 					$.each(data, function(i, field){
 
 						var li = $('<li data-image-id="' + field.id + '">');
-						var img = $('<img src="/file/' + field.fileName + '"/>');
+						var img = $('<img src="/file/' + field.thumbnailFileName + '"/>');
 
 						li.click(function (evt) {
 
@@ -217,6 +217,12 @@
 
 				datajson.images = GetSelectedImages();
 
+				if (datajson.images.length == 0)
+				{
+					SetDialogAlert("You must select at least one gallery image.", "error");
+					return;
+				}
+
 				$.ajax({
 					type: 'POST',
 					url: '/api/gallery',
@@ -254,7 +260,13 @@
 				}
 
 				datajson.images = GetSelectedImages();
-				
+
+				if (datajson.images.length == 0)
+				{
+					SetDialogAlert("You must select at least one gallery image.", "error");
+					return;
+				}
+
 				$.ajax({
 					type: 'PUT',
 					url: '/api/gallery/' + form.data().id,
@@ -323,7 +335,7 @@
 					if (selected)
 						$(this).attr("data-selected", "true");
 
-				});				
+				});
 			}
 
 			function ClearSelectedImages()

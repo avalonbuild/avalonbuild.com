@@ -12,6 +12,7 @@ using System.IO;
 using System.Threading.Tasks;
 using avalonbuild.com.Data;
 using avalonbuild.com.Models;
+using ImageSharp;
 
 namespace avalonbuild.com.Controllers.Api
 {
@@ -43,59 +44,30 @@ namespace avalonbuild.com.Controllers.Api
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Image model)
+        public async Task<IActionResult> Create(Models.Image model)
         {
             if (!ModelState.IsValid || Request.Form.Files.Count != 1)
-            {
                 return BadRequest("Image file is required.");
-            }
 
-            // filename is optional, if not provided default to the filename uploaded
             if (model.Name == null || model.Name == "")
+                model.Name = Request.Form.Files[0].FileName;    //filename is optional, if not provided use the uploaded file name
+
+            if (await FileExists("images/" + model.Name))
+                return BadRequest("An image with the same filename already exists.");
+
+            using (var memoryStream = new MemoryStream())
             {
-                model.Name = Request.Form.Files[0].FileName;
-            }
+                await Request.Form.Files[0].CopyToAsync(memoryStream);
 
-            var file = new Models.File
-            {
-                Name = "images/" + model.Name,
-                MimeType = Request.Form.Files[0].ContentType
-            };
-
-            var image = new Models.Image
-            {
-                Name = model.Name,
-                Title = model.Title,
-                Description = model.Description,
-                FileName = file.Name
-            };
-
-            try {
-
-                using (var memoryStream = new MemoryStream())
-                {
-                    await Request.Form.Files[0].CopyToAsync(memoryStream);
-                    file.Data = memoryStream.ToArray();
+                try {
+                    await SaveImageFile(memoryStream, "images/" + model.Name, Request.Form.Files[0].ContentType);
+                    await SaveImageThumbnailFile(memoryStream, "images/thumb-" + model.Name, Request.Form.Files[0].ContentType);
+                    await SaveImage(model.Name, model.Title, model.Description, "images/" + model.Name, "images/thumb-" + model.Name);
                 }
-
-                _files.Files.Add(file);
-
-                await _files.SaveChangesAsync();
-            }
-            catch (Exception)
-            {
-                return BadRequest("Add image failed, duplicate filename exists.");
-            }
-
-            try {
-
-                _images.Images.Add(image);
-
-                await _images.SaveChangesAsync();
-            }
-            catch (Exception)
-            {
-                return BadRequest("Add image failed.");
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
             }
 
             return Json("Image uploaded successfully.");
@@ -113,8 +85,15 @@ namespace avalonbuild.com.Controllers.Api
                     Name = image.FileName
                 };
 
+                var thumbfile = new Models.File {
+                    Name = image.ThumbnailFileName
+                };
+
                 _files.Attach(file);
                 _files.Remove(file);
+
+                _files.Attach(thumbfile);
+                _files.Remove(thumbfile);
 
                 await _files.SaveChangesAsync();
 
@@ -123,6 +102,94 @@ namespace avalonbuild.com.Controllers.Api
             }
 
             return Ok();
+        }
+
+        private async Task<bool> FileExists(string FileName)
+        {
+            return await _files.Files.AnyAsync(i => i.Name == FileName);
+        }
+
+        private async Task SaveImageFile(MemoryStream FileStream, string FileName, string ContentType)
+        {
+            var maxWidth = 1920;
+
+            var file = new Models.File
+            {
+                Name = FileName,
+                MimeType = ContentType
+            };
+
+            try {
+                using (var resizedImage = ImageSharp.Image.Load(FileStream.ToArray()))
+                {
+                    using (var resizeStream = new MemoryStream()) {
+
+                        resizedImage.Resize(maxWidth, (resizedImage.Height / resizedImage.Width) * maxWidth).Save(resizeStream);
+                        file.Data = resizeStream.ToArray();
+                    }
+                }
+
+                _files.Files.Add(file);
+
+                await _files.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                throw new Exception("Error saving image file.");
+            }
+        }
+
+        private async Task SaveImageThumbnailFile(MemoryStream FileStream, string FileName, string ContentType)
+        {
+            var maxThumbWidth = 456;
+
+            var file = new Models.File
+            {
+                Name = FileName,
+                MimeType = ContentType
+            };
+
+            try {
+                using (var resizedImage = ImageSharp.Image.Load(FileStream.ToArray()))
+                {
+                    using (var resizeStream = new MemoryStream()) {
+
+                        resizedImage.Resize(maxThumbWidth, (resizedImage.Height / resizedImage.Width) * maxThumbWidth).Save(resizeStream);
+                        file.Data = resizeStream.ToArray();
+                    }
+                }
+
+                _files.Files.Add(file);
+
+                await _files.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                throw new Exception("Error saving thumbnail image file.");
+            }
+        }
+
+        private async Task SaveImage(string Name, string Title, string Description, string FileName, string ThumbnailFileName)
+        {
+            var image = new Models.Image
+            {
+                Name = Name,
+                Title = Title,
+                Description = Description,
+                FileName = FileName,
+                ThumbnailFileName = ThumbnailFileName
+            };
+
+            try {
+
+                _images.Images.Add(image);
+
+                await _images.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                throw new Exception("Error saving image.");
+            }
         }
     }
 }

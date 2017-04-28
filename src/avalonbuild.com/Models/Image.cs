@@ -23,6 +23,8 @@ namespace avalonbuild.com.Models
 
 		public string FileName { get; set; }
 
+		public string ThumbnailFileName { get; set; }
+
 		public List<GalleryImage> Galleries { get; set; }
 	}
 }

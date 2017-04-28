@@ -40,16 +40,22 @@
 	#images-list {
 		max-height: 14em;
 		overflow-y: scroll;
-		padding: 0;
+		padding: .125em;
 		list-style: none;
+		border: 1px solid #eee;
+
+		display: flex;
+		align-content: stretch;
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: flex-start;
+		align-items: stretch;
 
 		li {
-			float: left;
 			position: relative;
 			box-sizing: border-box;
-			width: 33.3333%;
-			padding: .25em;
-			margin-bottom: .25em;
+			width: 25%;
+			padding: .125em;
 
 			img {
 				display: block;

@@ -23,8 +23,6 @@ namespace avalonbuild.com.Migrations.ImageDb
 
                     b.Property<string>("Description");
 
-                    b.Property<string>("FileName");
-
                     b.Property<string>("Name");
 
                     b.Property<string>("Title");
@@ -55,6 +53,8 @@ namespace avalonbuild.com.Migrations.ImageDb
                     b.Property<string>("Description");
 
                     b.Property<string>("FileName");
+
+                    b.Property<string>("ThumbnailFileName");
 
                     b.Property<string>("Name")
                         .IsRequired();

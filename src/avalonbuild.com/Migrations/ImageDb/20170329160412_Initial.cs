@@ -17,7 +17,6 @@ namespace avalonbuild.com.Migrations.ImageDb
                         .Annotation("Sqlite:Autoincrement", true)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Description = table.Column<string>(nullable: true),
-                    FileName = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: true),
                     Title = table.Column<string>(nullable: true)
                 },
@@ -35,6 +34,7 @@ namespace avalonbuild.com.Migrations.ImageDb
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Description = table.Column<string>(nullable: true),
                     FileName = table.Column<string>(nullable: true),
+                    ThumbnailFileName = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: false),
                     Title = table.Column<string>(nullable: true)
                 },

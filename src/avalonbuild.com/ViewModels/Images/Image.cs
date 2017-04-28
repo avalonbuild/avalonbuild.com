@@ -18,5 +18,6 @@ namespace avalonbuild.com.ViewModels
 		public string Description { get; set; }
 
 		public string FileName { get; set; }
+		public string ThumbnailFileName { get; set; }
 	}
 }

@@ -70,7 +70,8 @@ namespace avalonbuild.com.Controllers
                         Name = image.Image.Name,
                         Title = image.Image.Title,
                         Description = image.Image.Description,
-                        FileName = image.Image.FileName
+                        FileName = image.Image.FileName,
+                        ThumbnailFileName = image.Image.ThumbnailFileName
                     };
 
                     modelGallery.Images.Add(modelImage);
