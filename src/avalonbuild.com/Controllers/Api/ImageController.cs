@@ -90,35 +90,35 @@ namespace avalonbuild.com.Controllers.Api
         {
             var image = await _images.Images.SingleOrDefaultAsync(i => i.ID == id);
 
-            if (image != null)
-            {
-                try {
-                    var file = new Models.File {
-                        Name = image.FileName
-                    };
+            if (image == null)
+                return NotFound();
 
-                    var thumbfile = new Models.File {
-                        Name = image.ThumbnailFileName
-                    };
+            try {
+                var file = new Models.File {
+                    Name = image.FileName
+                };
 
-                    _files.Attach(file);
-                    _files.Remove(file);
+                var thumbfile = new Models.File {
+                    Name = image.ThumbnailFileName
+                };
 
-                    _files.Attach(thumbfile);
-                    _files.Remove(thumbfile);
+                _files.Attach(file);
+                _files.Remove(file);
 
-                    await _files.SaveChangesAsync();
+                _files.Attach(thumbfile);
+                _files.Remove(thumbfile);
 
-                    _images.Remove(image);
-                    await _images.SaveChangesAsync();
-                }
-                catch (Exception ex)
-                {
-                    return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-                }
+                await _files.SaveChangesAsync();
+
+                _images.Remove(image);
+                await _images.SaveChangesAsync();
+
+                return new NoContentResult();
             }
-
-            return new NoContentResult();
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
 
         private async Task<bool> FileExists(string FileName)
