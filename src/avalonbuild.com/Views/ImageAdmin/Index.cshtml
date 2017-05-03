@@ -134,13 +134,20 @@
 					processData: false,
 					data: data,
 					statusCode: {
-						200: function(response, textStatus, jqXHR) {
-							SetPageAlert(response, "success");
+						// Successfully Created
+						201: function(response, textStatus, jqXHR) {
+							SetPageAlert("Image added successfully", "success");
 							CloseDialog();
 							$("#dialog-submit").prop("disabled",false);
-							PopulateImages();
+							PopulateImage(response, $('#images-list'));
 						},
+						// Bad Request - Missing file
 						400: function(jqXHR, textStatus, errorThrown) {
+							SetDialogAlert(jqXHR.responseText, "error");
+							$("#dialog-submit").prop("disabled",false);
+						},
+						// Conflict - Duplicate filename
+						409: function(jqXHR, textStatus, errorThrown) {
 							SetDialogAlert(jqXHR.responseText, "error");
 							$("#dialog-submit").prop("disabled",false);
 						}
@@ -184,22 +191,27 @@
 
 					list.empty();
 					$.each(data, function(i, field){
-						var li = $('<li>');
-						var img = $('<img src="/file/' + field.thumbnailFileName + '"/>');
-						var del = $('<a class="delete" title="Delete Image" href="/api/image/' + field.id + '"></a>');
-
-						del.click(function (evt) {
-							evt.preventDefault();
-							$(this).parent().find("img").fadeTo(100, 0.4);
-							DeleteImage($(this).attr("href"));
-						});
-
-						li.append(img);
-						li.append(del);
-						list.append(li);
+						PopulateImage(field, list);
 					});
 
 				});
+			}
+
+			function PopulateImage(image, list)
+			{
+				var li = $('<li>');
+				var img = $('<img src="/file/' + image.thumbnailFileName + '"/>');
+				var del = $('<a class="delete" title="Delete Image" href="/api/image/' + image.id + '"></a>');
+
+				del.click(function (evt) {
+					evt.preventDefault();
+					//$(this).parent().find("img").fadeTo(100, 0.4);
+					DeleteImage($(this));
+				});
+
+				li.append(img);
+				li.append(del);
+				list.append(li);
 			}
 
 			function ShowAddImage()
@@ -219,15 +231,30 @@
 				OpenDialog();
 			}
 
-			function DeleteImage(url)
+			function DeleteImage(image)
 			{
+				var url = image.attr("href");
+
+				var x = image.parent().get(0);
+
+				x.className += " deleting";
+
 				$.ajax({
 					type: 'DELETE',
 					url: url,
 					success: function(data, textStatus, jqXHR) {
-						PopulateImages();
+						//remove list item when the item is successfully deleted from the server
+						var x = image.parent().get(0);
+
+						x.style.animation = "delete-animation 1s";
+						x.addEventListener("animationend", RemoveImage);
 					}
 				});
+			}
+
+			function RemoveImage()
+			{
+				$(this).remove();
 			}
 
 			function ImageUploadSuccess(message)

@@ -36,9 +36,20 @@ namespace avalonbuild.com.Controllers.Api
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var model = await _images.Images.ToListAsync();
+            var images = await _images.Images.ToListAsync();
 
-            return Json(model);
+            return Ok(images);
+        }
+
+        [HttpGet("{id}", Name = "GetImage")]
+        public async Task<IActionResult> Get(int id)
+        {
+            var image = await _images.Images.SingleOrDefaultAsync(i => i.ID == id);
+
+            if (image == null)
+                return NotFound();
+
+            return Ok(image);
         }
 
         [HttpPost]
@@ -53,7 +64,7 @@ namespace avalonbuild.com.Controllers.Api
                 model.Name = Request.Form.Files[0].FileName;    //filename is optional, if not provided use the uploaded file name
 
             if (await FileExists("images/" + model.Name))
-                return BadRequest("An image with the same filename already exists.");
+                return StatusCode(StatusCodes.Status409Conflict, "An image with the same filename already exists.");
 
             using (var memoryStream = new MemoryStream())
             {
@@ -62,15 +73,15 @@ namespace avalonbuild.com.Controllers.Api
                 try {
                     await SaveImageFile(memoryStream, "images/" + model.Name, Request.Form.Files[0].ContentType);
                     await SaveImageThumbnailFile(memoryStream, "images/thumb-" + model.Name, Request.Form.Files[0].ContentType);
-                    await SaveImage(model.Name, model.Title, model.Description, "images/" + model.Name, "images/thumb-" + model.Name);
+                    var image = await SaveImage(model.Name, model.Title, model.Description, "images/" + model.Name, "images/thumb-" + model.Name);
+
+                    return CreatedAtRoute("GetImage", new { id = image.ID }, image);
                 }
                 catch (Exception ex)
                 {
-                    return BadRequest(ex.Message);
+                    return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
                 }
             }
-
-            return Json("Image uploaded successfully.");
         }
 
         [HttpDelete("{id}")]
@@ -81,27 +92,33 @@ namespace avalonbuild.com.Controllers.Api
 
             if (image != null)
             {
-                var file = new Models.File {
-                    Name = image.FileName
-                };
+                try {
+                    var file = new Models.File {
+                        Name = image.FileName
+                    };
 
-                var thumbfile = new Models.File {
-                    Name = image.ThumbnailFileName
-                };
+                    var thumbfile = new Models.File {
+                        Name = image.ThumbnailFileName
+                    };
 
-                _files.Attach(file);
-                _files.Remove(file);
+                    _files.Attach(file);
+                    _files.Remove(file);
 
-                _files.Attach(thumbfile);
-                _files.Remove(thumbfile);
+                    _files.Attach(thumbfile);
+                    _files.Remove(thumbfile);
 
-                await _files.SaveChangesAsync();
+                    await _files.SaveChangesAsync();
 
-                _images.Remove(image);
-                await _images.SaveChangesAsync();
+                    _images.Remove(image);
+                    await _images.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+                }
             }
 
-            return Ok();
+            return new NoContentResult();
         }
 
         private async Task<bool> FileExists(string FileName)
@@ -169,7 +186,7 @@ namespace avalonbuild.com.Controllers.Api
             }
         }
 
-        private async Task SaveImage(string Name, string Title, string Description, string FileName, string ThumbnailFileName)
+        private async Task<Models.Image> SaveImage(string Name, string Title, string Description, string FileName, string ThumbnailFileName)
         {
             var image = new Models.Image
             {
@@ -185,6 +202,8 @@ namespace avalonbuild.com.Controllers.Api
                 _images.Images.Add(image);
 
                 await _images.SaveChangesAsync();
+
+                return image;
             }
             catch (Exception)
             {
