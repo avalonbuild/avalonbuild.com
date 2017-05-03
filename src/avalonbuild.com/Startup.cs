@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -143,23 +144,25 @@ namespace avalonbuild.com
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
+            app.MapWhen(a => a.Request.Path.StartsWithSegments("/api"), ConfigureApi);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
                 app.UseBrowserLink();
+
+                // Run database migrations at startup to allow continuous delivery without DB intervention
+                using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+                {
+                    serviceScope.ServiceProvider.GetService<ApplicationDbContext>().Database.Migrate();
+                    serviceScope.ServiceProvider.GetService<FileDbContext>().Database.Migrate();
+                    serviceScope.ServiceProvider.GetService<ImageDbContext>().Database.Migrate();
+                }
             }
             else
             {
                 app.UseExceptionHandler("/error");
-            }
-
-            // Run database migrations at startup to allow continuous delivery without DB intervention
-            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-            {
-                serviceScope.ServiceProvider.GetService<ApplicationDbContext>().Database.Migrate();
-                serviceScope.ServiceProvider.GetService<FileDbContext>().Database.Migrate();
-                serviceScope.ServiceProvider.GetService<ImageDbContext>().Database.Migrate();
             }
 
             app.UseStatusCodePagesWithReExecute("/error/{0}");
@@ -168,8 +171,6 @@ namespace avalonbuild.com
 
             app.UseIdentity();
 
-            // Add external authentication middleware below. To configure them please see https://go.microsoft.com/fwlink/?LinkID=532715
-
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -177,6 +178,18 @@ namespace avalonbuild.com
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
+        }
+
+        private void ConfigureApi(IApplicationBuilder app)
+        {
+            app.UseIdentity();
+
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
+            });
         }
     }
 }
