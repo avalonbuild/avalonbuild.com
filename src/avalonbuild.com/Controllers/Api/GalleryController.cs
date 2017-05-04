@@ -60,6 +60,9 @@ namespace avalonbuild.com.Controllers.Api
             if (gallery == null)
                 return BadRequest("Gallery information required.");
 
+            if (gallery.Name == null || gallery.Name == "")
+                return BadRequest("Gallery name is required.");
+
             var dbGallery = new Models.Gallery{
                 Name = gallery.Name,
                 Title = gallery.Title,
@@ -95,6 +98,9 @@ namespace avalonbuild.com.Controllers.Api
         {
             if (gallery == null)
                 return BadRequest("Error updating gallery.");
+
+            if (gallery.Name == null || gallery.Name == "")
+                return BadRequest("Gallery name is required.");
 
             var dbGallery = await _images.Galleries.Include(g => g.Images).ThenInclude(i => i.Image).SingleOrDefaultAsync(i => i.ID == id);
 
