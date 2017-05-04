@@ -102,36 +102,40 @@
 					list.empty();
 
 					$.each(data, function(i, field){
-
-						var li = $('<li data-gallery-id="' + field.id + '">');
-
-						li.data(field);
-
-						var img;
-
-						if (field.images.length > 0)
-							img = $('<img src="/file/' + field.images[0].thumbnailFileName + '"/>');
-						else
-							img = $('<img src="/images/galleries/default.jpg"/>');
-
-						var del = $('<a class="delete" title="Delete Gallery"></a>');
-
-						img.click(function (evt) {
-							evt.preventDefault();
-							ShowEditGallery($(this).parent().data());
-						});
-
-						del.click(function (evt) {
-							evt.preventDefault();
-							DeleteGallery($(this).parent().data());
-						});
-
-						li.append(img);
-						li.append(del);
-						list.append(li);
+						PopulateGallery(field, list);
 					});
 
 				});
+			}
+
+			function PopulateGallery(gallery, list)
+			{
+				var li = $('<li data-gallery-id="' + gallery.id + '">');
+
+				li.data(gallery);
+
+				var img;
+
+				if (gallery.images.length > 0)
+					img = $('<img src="/file/' + gallery.images[0].thumbnailFileName + '"/>');
+				else
+					img = $('<img src="/images/galleries/default.jpg"/>');
+
+				var del = $('<a class="delete" title="Delete Gallery"></a>');
+
+				img.click(function (evt) {
+					evt.preventDefault();
+					ShowEditGallery($(this).parent().data());
+				});
+
+				del.click(function (evt) {
+					evt.preventDefault();
+					DeleteGallery($(this));
+				});
+
+				li.append(img);
+				li.append(del);
+				list.append(li);
 			}
 
 			function PopulateImages()
@@ -233,11 +237,13 @@
 					dataType: "json",
 					data: JSON.stringify(datajson),
 					statusCode: {
-						200: function(response, textStatus, jqXHR) {
-							SetPageAlert(response, "success");
+						// Successfully Created
+						201: function(response, textStatus, jqXHR) {
+							SetPageAlert("Gallery added successfully", "success");
 							ToggleDialog();
-							PopulateGalleries();
+							PopulateGallery(response, $('#galleries-list'));
 						},
+						// Bad Request - Missing information
 						400: function(jqXHR, textStatus, errorThrown) {
 							SetDialogAlert(jqXHR.responseText, "error");
 						}
@@ -277,11 +283,13 @@
 					dataType: "json",
 					data: JSON.stringify(datajson),
 					statusCode: {
-						200: function(response, textStatus, jqXHR) {
-							SetPageAlert(response, "success");
+						// Successfully Updated
+						204: function(response, textStatus, jqXHR) {
+							SetPageAlert("Gallery updated successfully", "success");
 							ToggleDialog();
-							PopulateGalleries();
+							PopulateGalleries(); // TODO: Make this update the gallery data instead of reloading the gallery info from the server
 						},
+						// Bad Request - Missing information
 						400: function(jqXHR, textStatus, errorThrown) {
 							SetDialogAlert(jqXHR.responseText, "error");
 						}
@@ -292,15 +300,26 @@
 				});
 			}
 
-			function DeleteGallery(gallery)
+			function DeleteGallery(trigger)
 			{
+				var gallery = trigger.parent().data();
+
+				var listItem = trigger.parent().get(0);
+				listItem.className += " deleting";
+
 				$.ajax({
 					type: 'DELETE',
 					url: '/api/gallery/' + gallery.id,
 					success: function(data, textStatus, jqXHR) {
-						PopulateGalleries();
+						listItem.style.animationName = "delete-animation";
+						listItem.addEventListener("animationend", RemoveGallery);
 					}
 				});
+			}
+
+			function RemoveGallery()
+			{
+				$(this).remove();
 			}
 
 			function GetSelectedImages()

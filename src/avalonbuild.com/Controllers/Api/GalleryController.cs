@@ -38,10 +38,10 @@ namespace avalonbuild.com.Controllers.Api
                 model.Add(GalleryModelToViewModel(gallery));
             }
 
-            return Json(model);
+            return Ok(model);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetGallery")]
         public async Task<IActionResult> Get(int id)
         {
             var gallery = await _images.Galleries.Include(g => g.Images).ThenInclude(i => i.Image).SingleOrDefaultAsync(i => i.ID == id);
@@ -49,7 +49,7 @@ namespace avalonbuild.com.Controllers.Api
             if (gallery == null)
                 return NotFound();
 
-            return Json(GalleryModelToViewModel(gallery));
+            return Ok(GalleryModelToViewModel(gallery));
         }
 
         [Authorize]
@@ -58,7 +58,7 @@ namespace avalonbuild.com.Controllers.Api
         public async Task<IActionResult> Create([FromBody] ViewModels.Gallery gallery)
         {
             if (gallery == null)
-                return BadRequest("Error creating gallery.");
+                return BadRequest("Gallery information required.");
 
             var dbGallery = new Models.Gallery{
                 Name = gallery.Name,
@@ -66,19 +66,26 @@ namespace avalonbuild.com.Controllers.Api
                 Description = gallery.Description
             };
 
-            _images.Galleries.Add(dbGallery);
-
-            foreach (var image in gallery.Images)
+            try
             {
-                var dbImage = await _images.Images.SingleOrDefaultAsync(i => i.ID == image.ID);
+                _images.Galleries.Add(dbGallery);
 
-                if (dbImage != null)
-                    dbGallery.Images.Add(new GalleryImage { Image = dbImage});
+                foreach (var image in gallery.Images)
+                {
+                    var dbImage = await _images.Images.SingleOrDefaultAsync(i => i.ID == image.ID);
+
+                    if (dbImage != null)
+                        dbGallery.Images.Add(new GalleryImage { Image = dbImage});
+                }
+
+                await _images.SaveChangesAsync();
+
+                return CreatedAtRoute("GetGallery", new { id = dbGallery.ID }, GalleryModelToViewModel(dbGallery));
             }
-
-            await _images.SaveChangesAsync();
-
-            return Json("Gallery added successfully.");
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
 
         [Authorize]
@@ -91,51 +98,61 @@ namespace avalonbuild.com.Controllers.Api
 
             var dbGallery = await _images.Galleries.Include(g => g.Images).ThenInclude(i => i.Image).SingleOrDefaultAsync(i => i.ID == id);
 
-            dbGallery.ID = id;
-            dbGallery.Name = gallery.Name;
-            dbGallery.Title = gallery.Title;
-            dbGallery.Description = gallery.Description;
+            if (dbGallery == null)
+                return NotFound();
 
-            _images.Galleries.Update(dbGallery);
-
-            //remove images that are not in the new list
-            foreach (var image in dbGallery.Images.ToArray())
+            try
             {
-                bool remove = true;
+                dbGallery.ID = id;
+                dbGallery.Name = gallery.Name;
+                dbGallery.Title = gallery.Title;
+                dbGallery.Description = gallery.Description;
 
-                foreach (var i in gallery.Images)
+                _images.Galleries.Update(dbGallery);
+
+                //remove images that are not in the new list
+                foreach (var image in dbGallery.Images.ToArray())
                 {
-                    if (i.ID == image.ImageID)
-                        remove = false;
+                    bool remove = true;
+
+                    foreach (var i in gallery.Images)
+                    {
+                        if (i.ID == image.ImageID)
+                            remove = false;
+                    }
+
+                    if (remove)
+                        dbGallery.Images.Remove(image);
                 }
 
-                if (remove)
-                    dbGallery.Images.Remove(image);
-            }
+                // add images from the new list that are not in the old list
+                foreach (var image in gallery.Images)
+                {
+                    bool add = true;
 
-            // add images from the new list that are not in the old list
-            foreach (var image in gallery.Images)
+                    foreach (var i in dbGallery.Images)
+                    {
+                        if (i.ImageID == image.ID)
+                            add = false;
+                    }
+
+                    if (add)
+                    {
+                        var dbImage = await _images.Images.SingleOrDefaultAsync(i => i.ID == image.ID);
+
+                        if (dbImage != null)
+                            dbGallery.Images.Add(new GalleryImage { Image = dbImage});
+                    }
+                }
+
+                await _images.SaveChangesAsync();
+
+                return new NoContentResult();
+            }
+            catch (Exception ex)
             {
-                bool add = true;
-
-                foreach (var i in dbGallery.Images)
-                {
-                    if (i.ImageID == image.ID)
-                        add = false;
-                }
-
-                if (add)
-                {
-                    var dbImage = await _images.Images.SingleOrDefaultAsync(i => i.ID == image.ID);
-
-                    if (dbImage != null)
-                        dbGallery.Images.Add(new GalleryImage { Image = dbImage});
-                }
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
-
-            await _images.SaveChangesAsync();
-
-            return Json("Gallery updated successfully.");
         }
 
         [Authorize]
@@ -147,11 +164,18 @@ namespace avalonbuild.com.Controllers.Api
             if (gallery == null)
                 return NotFound();
 
-            _images.Galleries.Remove(gallery);
+            try
+            {
+                _images.Galleries.Remove(gallery);
 
-            await _images.SaveChangesAsync();
+                await _images.SaveChangesAsync();
 
-            return Ok();
+                return new NoContentResult();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
 
         private ViewModels.Gallery GalleryModelToViewModel(Models.Gallery gallery)

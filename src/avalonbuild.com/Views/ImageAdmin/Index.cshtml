@@ -117,6 +117,8 @@
 					data.append(input.name, input.value);
 				});
 
+				$("#progress").show();
+
 				$.ajax({
 					xhr: function(){
 						var xhr = new window.XMLHttpRequest();
@@ -138,37 +140,36 @@
 						201: function(response, textStatus, jqXHR) {
 							SetPageAlert("Image added successfully", "success");
 							CloseDialog();
-							$("#dialog-submit").prop("disabled",false);
 							PopulateImage(response, $('#images-list'));
 						},
 						// Bad Request - Missing file
 						400: function(jqXHR, textStatus, errorThrown) {
 							SetDialogAlert(jqXHR.responseText, "error");
-							$("#dialog-submit").prop("disabled",false);
 						},
 						// Conflict - Duplicate filename
 						409: function(jqXHR, textStatus, errorThrown) {
 							SetDialogAlert(jqXHR.responseText, "error");
-							$("#dialog-submit").prop("disabled",false);
 						}
 					},
 					error: function (jqXHR, textStatus, errorThrown) {
 						SetDialogAlert("Error uploading image.", "error");
+					},
+
+				}).always(function () {
 						$("#dialog-submit").prop("disabled",false);
-					}
+						$("#progress").hide();
 				});
 			}
 
 			function UploadStart(event)
 			{
 				console.log("Upload started");
-				$("#progress").show();
+
 			}
 
 			function UploadComplete(event)
 			{
 				console.log("Upload complete");
-				$("#progress").hide();
 			}
 
 			function UploadProgress(event)
@@ -205,7 +206,6 @@
 
 				del.click(function (evt) {
 					evt.preventDefault();
-					//$(this).parent().find("img").fadeTo(100, 0.4);
 					DeleteImage($(this));
 				});
 
@@ -244,9 +244,7 @@
 					url: url,
 					success: function(data, textStatus, jqXHR) {
 						//remove list item when the item is successfully deleted from the server
-						var x = image.parent().get(0);
-
-						x.style.animation = "delete-animation 1s";
+						x.style.animationName = "delete-animation";
 						x.addEventListener("animationend", RemoveImage);
 					}
 				});
@@ -255,19 +253,6 @@
 			function RemoveImage()
 			{
 				$(this).remove();
-			}
-
-			function ImageUploadSuccess(message)
-			{
-				SetPageAlert(message, "success");
-
-				var inputs = $("#image-form :input:not([type='hidden'])");
-
-				$.each(inputs, function (key, input) {
-					input.value = null;
-				});
-
-				CloseDialog();
 			}
 
 			function OpenDialog()
