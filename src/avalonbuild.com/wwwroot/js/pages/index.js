@@ -6,7 +6,7 @@ $(function () {
 
     $("#scroller").click(function (e){e.preventDefault();
         $('html, body').animate({
-            scrollTop: $("#about").offset().top
+            scrollTop: $("#testimonials").offset().top
         }, 800);
     });
 
