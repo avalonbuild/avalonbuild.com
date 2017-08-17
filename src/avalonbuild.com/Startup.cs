@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -58,6 +58,12 @@ namespace avalonbuild.com
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/login";
+                options.LogoutPath = "/logoff";
+            });
+
             services.AddMvc();
 
             // Add application services.
@@ -65,28 +71,6 @@ namespace avalonbuild.com
             services.AddTransient<ISmsSender, AuthMessageSender>();
 
             services.AddAntiforgery();
-
-            services.Configure<IdentityOptions>(options =>
-            {
-                // Password settings
-                //options.Password.RequireDigit = true;
-                //options.Password.RequiredLength = 8;
-                //options.Password.RequireNonAlphanumeric = false;
-                //options.Password.RequireUppercase = true;
-                //options.Password.RequireLowercase = false;
-
-                // Lockout settings
-                //options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
-                //options.Lockout.MaxFailedAccessAttempts = 10;
-
-                // Cookie settings
-                //options.Cookies.ApplicationCookie.ExpireTimeSpan = TimeSpan.FromDays(150);
-                options.Cookies.ApplicationCookie.LoginPath = "/login";
-                options.Cookies.ApplicationCookie.LogoutPath = "/logoff";
-
-                // User settings
-                options.User.RequireUniqueEmail = true;
-            });
         }
 
         public void ConfigureDevelopmentServices(IServiceCollection services)
@@ -107,6 +91,12 @@ namespace avalonbuild.com
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/login";
+                options.LogoutPath = "/logoff";
+            });
+
             services.AddMvc();
 
             // Add application services.
@@ -114,28 +104,6 @@ namespace avalonbuild.com
             services.AddTransient<ISmsSender, AuthMessageSender>();
 
             services.AddAntiforgery();
-
-            services.Configure<IdentityOptions>(options =>
-            {
-                // Password settings
-                //options.Password.RequireDigit = true;
-                //options.Password.RequiredLength = 8;
-                //options.Password.RequireNonAlphanumeric = false;
-                //options.Password.RequireUppercase = true;
-                //options.Password.RequireLowercase = false;
-
-                // Lockout settings
-                //options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
-                //options.Lockout.MaxFailedAccessAttempts = 10;
-
-                // Cookie settings
-                //options.Cookies.ApplicationCookie.ExpireTimeSpan = TimeSpan.FromDays(150);
-                options.Cookies.ApplicationCookie.LoginPath = "/login";
-                options.Cookies.ApplicationCookie.LogoutPath = "/logoff";
-
-                // User settings
-                options.User.RequireUniqueEmail = true;
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -169,7 +137,7 @@ namespace avalonbuild.com
 
             app.UseStaticFiles();
 
-            app.UseIdentity();
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {
@@ -182,7 +150,7 @@ namespace avalonbuild.com
 
         private void ConfigureApi(IApplicationBuilder app)
         {
-            app.UseIdentity();
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {

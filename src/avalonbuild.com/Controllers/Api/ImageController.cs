@@ -141,7 +141,7 @@ namespace avalonbuild.com.Controllers.Api
                 {
                     using (var resizeStream = new MemoryStream()) {
 
-                        resizedImage.Resize(maxWidth, (resizedImage.Height / resizedImage.Width) * maxWidth).Save(resizeStream);
+                        resizedImage.Resize(maxWidth, (resizedImage.Height / resizedImage.Width) * maxWidth).Save(resizeStream, ImageFormats.Jpeg);
                         file.Data = resizeStream.ToArray();
                     }
                 }
@@ -158,7 +158,7 @@ namespace avalonbuild.com.Controllers.Api
 
         private async Task SaveImageThumbnailFile(MemoryStream FileStream, string FileName, string ContentType)
         {
-            var maxThumbWidth = 456;
+            var maxThumbWidth = 616;
 
             var file = new Models.File
             {
@@ -171,7 +171,7 @@ namespace avalonbuild.com.Controllers.Api
                 {
                     using (var resizeStream = new MemoryStream()) {
 
-                        resizedImage.Resize(maxThumbWidth, (resizedImage.Height / resizedImage.Width) * maxThumbWidth).Save(resizeStream);
+                        resizedImage.Resize(maxThumbWidth, (resizedImage.Height / resizedImage.Width) * maxThumbWidth).Save(resizeStream, ImageFormats.Jpeg);
                         file.Data = resizeStream.ToArray();
                     }
                 }
