@@ -194,7 +194,10 @@ namespace avalonbuild.com.Controllers.Api
                         // Resize the image and crop it to the thumbnail size
                         //
 
-                        if (resizedImage.Width > resizedImage.Height)
+                        double sourceAspectRatio = (double) resizedImage.Width / (double) resizedImage.Height;
+                        double targetAspectRatio = (double) thumbWidth / (double) thumbHeight;
+
+                        if (sourceAspectRatio > targetAspectRatio)
                         {
                             double newWidth = ((double) resizedImage.Width / (double) resizedImage.Height) * thumbHeight;
                             double newHeight = thumbHeight;
