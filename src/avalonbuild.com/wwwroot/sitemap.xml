@@ -1,13 +1,28 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-
   <url>
-	<loc>http://avalonbuild.com/</loc>
+    <loc>http://avalonbuild.com/</loc>
   </url>
-
   <url>
-	<loc>http://avalonbuild.com/work</loc>
+    <loc>http://avalonbuild.com/galleries</loc>
   </url>
-
+  <url>
+    <loc>http://avalonbuild.com/gallery/interiors</loc>
+  </url>
+  <url>
+    <loc>http://avalonbuild.com/gallery/exteriors</loc>
+  </url>
+  <url>
+    <loc>http://avalonbuild.com/gallery/before-and-after</loc>
+  </url>
+  <url>
+    <loc>http://avalonbuild.com/gallery/details</loc>
+  </url>
+  <url>
+    <loc>http://avalonbuild.com/referrals</loc>
+  </url>
+  <url>
+    <loc>http://avalonbuild.com/#contact</loc>
+  </url>
 </urlset>
