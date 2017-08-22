@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using avalonbuild.com.Data;
 using avalonbuild.com.Models;
 using ImageSharp;
+using SixLabors.Primitives;
 
 namespace avalonbuild.com.Controllers.Api
 {
@@ -202,18 +203,30 @@ namespace avalonbuild.com.Controllers.Api
                             double newWidth = ((double) resizedImage.Width / (double) resizedImage.Height) * thumbHeight;
                             double newHeight = thumbHeight;
 
+                            int centerStartX = Convert.ToInt32((newWidth - thumbWidth) / 2);
+                            int centerStartY = Convert.ToInt32((newHeight - thumbHeight) / 2);
+
+                            var cropArea = new Rectangle(centerStartX, centerStartY, thumbWidth, thumbHeight);
+
                             _logger.LogInformation("Creating thumbnail from original image (" + resizedImage.Width + "x" + resizedImage.Height + "), sizing to " + Convert.ToInt32(newWidth) + "x" + Convert.ToInt32(newHeight) + " then cropping to " + thumbWidth + "x" + thumbHeight);
 
-                            resizedImage.Resize(Convert.ToInt32(newWidth), Convert.ToInt32(newHeight)).Crop(thumbWidth, thumbHeight).Save(resizeStream, ImageFormats.Jpeg);
+                            //resizedImage.Resize(Convert.ToInt32(newWidth), Convert.ToInt32(newHeight)).Crop(thumbWidth, thumbHeight).Save(resizeStream, ImageFormats.Jpeg);
+                            resizedImage.Resize(Convert.ToInt32(newWidth), Convert.ToInt32(newHeight)).Crop(cropArea).Save(resizeStream, ImageFormats.Jpeg);
                         }
                         else
                         {
                             double newWidth = thumbWidth;
                             double newHeight = ((double) resizedImage.Height / (double) resizedImage.Width) * thumbWidth;
 
+                            int centerStartX = Convert.ToInt32((newWidth - thumbWidth) / 2);
+                            int centerStartY = Convert.ToInt32((newHeight - thumbHeight) / 2);
+
+                            var cropArea = new Rectangle(centerStartX, centerStartY, thumbWidth, thumbHeight);
+
                             _logger.LogInformation("Creating thumbnail from original image (" + resizedImage.Width + "x" + resizedImage.Height + "), sizing to " + Convert.ToInt32(newWidth) + "x" + Convert.ToInt32(newHeight) + " then cropping to " + thumbWidth + "x" + thumbHeight);
 
-                            resizedImage.Resize(Convert.ToInt32(newWidth), Convert.ToInt32(newHeight)).Crop(thumbWidth, thumbHeight).Save(resizeStream, ImageFormats.Jpeg);
+                            //resizedImage.Resize(Convert.ToInt32(newWidth), Convert.ToInt32(newHeight)).Crop(thumbWidth, thumbHeight).Save(resizeStream, ImageFormats.Jpeg);
+                            resizedImage.Resize(Convert.ToInt32(newWidth), Convert.ToInt32(newHeight)).Crop(cropArea).Save(resizeStream, ImageFormats.Jpeg);
                         }
 
                         file.Data = resizeStream.ToArray();
