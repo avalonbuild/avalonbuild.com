@@ -128,7 +128,7 @@ namespace avalonbuild.com.Controllers.Api
 
         private async Task SaveImageFile(MemoryStream FileStream, string FileName, string ContentType)
         {
-            var maxWidth = 1920;
+            var maxDimension = 1920;
 
             var file = new Models.File
             {
@@ -141,7 +141,25 @@ namespace avalonbuild.com.Controllers.Api
                 {
                     using (var resizeStream = new MemoryStream()) {
 
-                        resizedImage.Resize(maxWidth, (resizedImage.Height / resizedImage.Width) * maxWidth).Save(resizeStream, ImageFormats.Jpeg);
+                        if (resizedImage.Width > resizedImage.Height)
+                        {
+                            double newWidth = maxDimension;
+                            double newHeight = ((double) resizedImage.Height / (double) resizedImage.Width) * maxDimension;
+
+                            _logger.LogInformation("Resizing image from " + resizedImage.Width + "x" + resizedImage.Height + " to " + Convert.ToInt32(newWidth) + "x" + Convert.ToInt32(newHeight));
+
+                            resizedImage.Resize(Convert.ToInt32(newWidth), Convert.ToInt32(newHeight)).Save(resizeStream, ImageFormats.Jpeg);
+                        }
+                        else
+                        {
+                            double newWidth = ((double) resizedImage.Width / (double) resizedImage.Height) * maxDimension;
+                            double newHeight = maxDimension;
+
+                            _logger.LogInformation("Resizing image from " + resizedImage.Width + "x" + resizedImage.Height + " to " + Convert.ToInt32(newWidth) + "x" + Convert.ToInt32(newHeight));
+
+                            resizedImage.Resize(Convert.ToInt32(newWidth), Convert.ToInt32(newHeight)).Save(resizeStream, ImageFormats.Jpeg);
+                        }
+
                         file.Data = resizeStream.ToArray();
                     }
                 }
@@ -158,7 +176,8 @@ namespace avalonbuild.com.Controllers.Api
 
         private async Task SaveImageThumbnailFile(MemoryStream FileStream, string FileName, string ContentType)
         {
-            var maxThumbWidth = 616;
+            var thumbWidth = 616;
+            var thumbHeight = 411;
 
             var file = new Models.File
             {
@@ -171,7 +190,29 @@ namespace avalonbuild.com.Controllers.Api
                 {
                     using (var resizeStream = new MemoryStream()) {
 
-                        resizedImage.Resize(maxThumbWidth, (resizedImage.Height / resizedImage.Width) * maxThumbWidth).Save(resizeStream, ImageFormats.Jpeg);
+                        //
+                        // Resize the image and crop it to the thumbnail size
+                        //
+
+                        if (resizedImage.Width > resizedImage.Height)
+                        {
+                            double newWidth = ((double) resizedImage.Width / (double) resizedImage.Height) * thumbHeight;
+                            double newHeight = thumbHeight;
+
+                            _logger.LogInformation("Creating thumbnail from original image (" + resizedImage.Width + "x" + resizedImage.Height + "), sizing to " + Convert.ToInt32(newWidth) + "x" + Convert.ToInt32(newHeight) + " then cropping to " + thumbWidth + "x" + thumbHeight);
+
+                            resizedImage.Resize(Convert.ToInt32(newWidth), Convert.ToInt32(newHeight)).Crop(thumbWidth, thumbHeight).Save(resizeStream, ImageFormats.Jpeg);
+                        }
+                        else
+                        {
+                            double newWidth = thumbWidth;
+                            double newHeight = ((double) resizedImage.Height / (double) resizedImage.Width) * thumbWidth;
+
+                            _logger.LogInformation("Creating thumbnail from original image (" + resizedImage.Width + "x" + resizedImage.Height + "), sizing to " + Convert.ToInt32(newWidth) + "x" + Convert.ToInt32(newHeight) + " then cropping to " + thumbWidth + "x" + thumbHeight);
+
+                            resizedImage.Resize(Convert.ToInt32(newWidth), Convert.ToInt32(newHeight)).Crop(thumbWidth, thumbHeight).Save(resizeStream, ImageFormats.Jpeg);
+                        }
+
                         file.Data = resizeStream.ToArray();
                     }
                 }
