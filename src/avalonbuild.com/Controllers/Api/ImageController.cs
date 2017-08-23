@@ -9,6 +9,7 @@ using Microsoft.Net.Http.Headers;
 using System.Collections.Generic;
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using avalonbuild.com.Data;
 using avalonbuild.com.Models;
@@ -37,7 +38,7 @@ namespace avalonbuild.com.Controllers.Api
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var images = await _images.Images.ToListAsync();
+            var images = await _images.Images.OrderByDescending(i => i.ID).ToListAsync();
 
             return Ok(images);
         }

@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using avalonbuild.com.Data;
 using avalonbuild.com.Models;
@@ -35,6 +36,8 @@ namespace avalonbuild.com.Controllers.Api
 
             foreach (var gallery in galleries)
             {
+                gallery.Images = gallery.Images.OrderByDescending(i => i.ImageID).ToList();
+
                 model.Add(GalleryModelToViewModel(gallery));
             }
 
@@ -44,10 +47,12 @@ namespace avalonbuild.com.Controllers.Api
         [HttpGet("{id}", Name = "GetGallery")]
         public async Task<IActionResult> Get(int id)
         {
-            var gallery = await _images.Galleries.Include(g => g.Images).ThenInclude(i => i.Image).SingleOrDefaultAsync(i => i.ID == id);
+            var gallery = await _images.Galleries.Include(g => g.Images.OrderBy(x => x.ImageID)).ThenInclude(i => i.Image).SingleOrDefaultAsync(i => i.ID == id);
 
             if (gallery == null)
                 return NotFound();
+
+            gallery.Images = gallery.Images.OrderByDescending(i => i.ImageID).ToList();
 
             return Ok(GalleryModelToViewModel(gallery));
         }

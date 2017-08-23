@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using avalonbuild.com.Data;
 using avalonbuild.com.Models;
@@ -31,6 +32,8 @@ namespace avalonbuild.com.Controllers
 
             foreach (var gallery in galleries)
             {
+                gallery.Images = gallery.Images.OrderByDescending(i => i.ImageID).ToList();
+
                 model.Add(GalleryModelToViewModel(gallery));
             }
 
@@ -44,6 +47,8 @@ namespace avalonbuild.com.Controllers
 
             if (gallery == null)
                 return NotFound();
+
+            gallery.Images = gallery.Images.OrderByDescending(i => i.ImageID).ToList();
 
             return View(GalleryModelToViewModel(gallery));
         }

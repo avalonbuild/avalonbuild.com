@@ -140,7 +140,7 @@
 						201: function(response, textStatus, jqXHR) {
 							SetPageAlert("Image added successfully", "success");
 							CloseDialog();
-							PopulateImage(response, $('#images-list'));
+							PopulateImage(response, $('#images-list'), true);
 						},
 						// Bad Request - Missing file
 						400: function(jqXHR, textStatus, errorThrown) {
@@ -198,7 +198,7 @@
 				});
 			}
 
-			function PopulateImage(image, list)
+			function PopulateImage(image, list, prepend)
 			{
 				var li = $('<li>');
 				var img = $('<img src="/file/' + image.thumbnailFileName + '"/>');
@@ -211,7 +211,11 @@
 
 				li.append(img);
 				li.append(del);
-				list.append(li);
+
+				if (prepend == true)
+					list.prepend(li);
+				else
+					list.append(li);
 			}
 
 			function ShowAddImage()
