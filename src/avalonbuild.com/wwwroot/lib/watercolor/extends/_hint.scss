@@ -29,6 +29,10 @@
 	transition: all .25s linear;
 	z-index: 1;
 
+	&:empty {
+		visibility: hidden;
+	}
+
 	&:before {
 		content: " ";
 		position: absolute;
