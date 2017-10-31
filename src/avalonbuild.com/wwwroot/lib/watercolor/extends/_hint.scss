@@ -30,7 +30,7 @@
 	z-index: 1;
 
 	&:empty {
-		visibility: hidden;
+		visibility: hidden !important;
 	}
 
 	&:before {
