@@ -3,13 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+
+using SixLabors.ImageSharp.Web;
+using SixLabors.ImageSharp.Memory;
+using SixLabors.ImageSharp.Web.Caching;
+using SixLabors.ImageSharp.Web.Commands;
+using SixLabors.ImageSharp.Web.DependencyInjection;
+using SixLabors.ImageSharp.Web.Middleware;
+using SixLabors.ImageSharp.Web.Processors;
+using SixLabors.ImageSharp.Web.Providers;
+
 using avalonbuild.com.Data;
 using avalonbuild.com.Models;
 using avalonbuild.com.Services;
@@ -18,7 +31,7 @@ namespace avalonbuild.com
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        public Startup(IWebHostEnvironment env)
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
@@ -42,6 +55,13 @@ namespace avalonbuild.com
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddLogging(loggingBuilder =>
+            {
+                loggingBuilder.AddConfiguration(Configuration.GetSection("Logging"));
+                loggingBuilder.AddConsole();
+                loggingBuilder.AddDebug();
+            });
+
             services.Configure<AppSettings>(options => Configuration.GetSection("AppSettings").Bind(options));
 
             // Add framework services.
@@ -64,7 +84,10 @@ namespace avalonbuild.com
                 options.LogoutPath = "/logoff";
             });
 
-            services.AddMvc();
+            // Add Image Management Middleware
+            services.AddImageSharp();
+
+            services.AddMvc().AddNewtonsoftJson();
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
@@ -75,6 +98,14 @@ namespace avalonbuild.com
 
         public void ConfigureDevelopmentServices(IServiceCollection services)
         {
+
+            services.AddLogging(loggingBuilder =>
+            {
+                loggingBuilder.AddConfiguration(Configuration.GetSection("Logging"));
+                loggingBuilder.AddConsole();
+                loggingBuilder.AddDebug();
+            });
+
             services.Configure<AppSettings>(options => Configuration.GetSection("AppSettings").Bind(options));
 
             // Add framework services.
@@ -97,7 +128,10 @@ namespace avalonbuild.com
                 options.LogoutPath = "/logoff";
             });
 
-            services.AddMvc();
+            // Add Image Management Middleware
+            services.AddImageSharp();
+
+            services.AddMvc().AddNewtonsoftJson();
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
@@ -107,18 +141,15 @@ namespace avalonbuild.com
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
-
             app.MapWhen(a => a.Request.Path.StartsWithSegments("/api"), ConfigureApi);
 
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
-                app.UseBrowserLink();
+                //app.UseBrowserLink();
 
                 // Run database migrations at startup to allow continuous delivery without DB intervention
                 using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
@@ -134,30 +165,49 @@ namespace avalonbuild.com
             }
 
             app.UseStatusCodePagesWithReExecute("/error/{0}");
+            app.UseImageSharp();
 
             app.UseStaticFiles();
 
-            app.UseAuthentication();
+            app.UseRouting();
+            //app.UseCors();
 
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints => {
+
+                endpoints.MapControllers();
+
             });
 
+            // app.UseMvc(routes =>
+            // {
+            //     routes.MapRoute(
+            //         name: "default",
+            //         template: "{controller=Home}/{action=Index}/{id?}");
+            // });
         }
 
         private void ConfigureApi(IApplicationBuilder app)
         {
-            app.UseAuthentication();
+            app.UseRouting();
 
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints => {
+
+                endpoints.MapControllers();
+
             });
+
+            // app.UseMvc(routes =>
+            // {
+            //     routes.MapRoute(
+            //         name: "default",
+            //         template: "{controller=Home}/{action=Index}/{id?}");
+            // });
         }
     }
 }

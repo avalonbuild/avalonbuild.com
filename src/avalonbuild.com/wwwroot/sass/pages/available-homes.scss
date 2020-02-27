@@ -1,0 +1,284 @@
+﻿@import "site/settings";
+@import "watercolor/modules/grid";
+
+//
+// Available Homes
+//
+
+#available-homes {
+
+	h2 {
+		background-image: url("/images/available-homes/available homes.svg");
+		background-repeat: no-repeat;
+		background-position: center;
+		height: 125px;
+		text-indent: -9999px;
+
+		@include breakpoint(medium) {
+			height: 200px;
+		}
+	}
+}
+
+//
+// Available Homes
+//
+
+#property-summary {
+
+	background-color: #f8fafc;
+
+	h3 {
+		line-height: 1.3;
+		margin-bottom: 1em;
+		
+		#introducing {
+			font-size: .6em;
+			opacity: .4;
+		}
+
+		#title {
+			font-size: 1.25em;
+			font-family: 'Cinzel Decorative', Arial;
+			opacity: 1;
+			margin-top: .1em;
+			margin-bottom: -.1em;
+		}
+
+		#tagline {
+			font-size: .65em;
+			opacity: .4;
+		}
+
+		address {
+			display: block;
+			margin-top: .5em;
+			font-size: .45em;
+			font-style: normal;
+			opacity: .3;
+		}
+	}
+
+	p {
+		max-width: 45em;
+		margin: $line-height * 1em auto;
+	}
+
+	#available-time {
+		font-size: 1em;
+		font-weight: bold;
+		opacity: 1;
+		color: #fbb03b;
+	}
+}
+
+#property-render {
+	margin: 0;
+	padding: 0 !important;
+
+	img {
+		display: block;
+		width: 100%;
+	}
+}
+
+#details {
+
+	ul {
+		margin: $line-height * 2em 0;
+		padding: 0 $line-height * .75em;
+		text-align: left;
+		column-count: 1;
+		column-gap: 5em;
+
+		@include breakpoint(large) {
+			column-count: 2;
+		}
+	}
+}
+
+//
+// Gallery
+//
+
+#gallery {
+
+	ul {
+		display: flex;
+		flex-wrap: wrap;
+		list-style: none;
+		margin: $line-height * 2em 0 ;
+		padding: 0;
+	}
+
+	li {
+		box-sizing: border-box;
+		padding: $line-height * .4em;
+
+		flex: 1;
+		flex-basis: 100%;
+		
+		@include breakpoint(large) {
+            flex-basis: 33.3%;
+        }
+
+		// &:first-child .prev {
+		// 	display: none;
+		// }
+
+		// &:last-child .next {
+		// 	display: none;
+		// }
+	}
+
+	a {
+
+		figure {
+			position: relative;
+			margin: 0;
+			text-align: left;
+			overflow: hidden;
+
+			img {
+				display: block;
+				transition: all 3s;
+			}
+
+			p {
+				margin: 0;
+			}
+		}
+
+		&:hover {
+
+			figure {
+				box-shadow: 0 0 30px rgba(0,0,0,0.4);
+
+				img {
+					transform: scale(1.05);
+				}
+			}
+		}
+	}
+}
+
+//
+// Lightbox from: https://tympanus.net/codrops/2011/12/26/css3-lightbox/
+//
+
+.lb-overlay{
+	width: 0px;
+	height: 0px;
+	position: fixed;
+	overflow: hidden;
+	left: 0px;
+	top: 0px;
+	padding: 0px;
+	z-index: 99;
+	text-align: center;
+	background: rgba(55, 58, 71, 0.9);
+
+	a {
+		background: rgba(25, 28, 41, 0.6);
+		color: #eee;
+		filter: alpha(opacity=0); /* internet explorer */
+		-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(opacity=0)"; /*IE8*/
+		box-shadow: 0px 1px 2px rgba(0,0,0,0.3);
+		border-radius: 50%;
+		opacity: 0;
+		transition: opacity 0.3s linear 1.2s;
+		transform: translateX(-50%);
+		cursor: pointer;
+		z-index: 1001;
+
+		&:hover {
+			background: rgba(25, 28, 41, 1);
+			color: #fff;
+		}
+	}
+
+	a.lb-close{
+		position: absolute;
+		top: 30px;
+		left: 50%;
+		height: 24px;
+		width: 24px;
+		font-size: 16px;
+		line-height: 24px;
+		text-align: center;
+		padding: .4em;
+		overflow: hidden;
+	}
+
+
+
+	img{
+		/* height: 100%; For Opera max-height does not seem to work */
+		max-height: 100%;
+		position: relative;
+		-webkit-box-shadow: 1px 1px 4px rgba(0,0,0,0.3);
+		-moz-box-shadow: 1px 1px 4px rgba(0,0,0,0.3);
+		box-shadow: 0px 2px 7px rgba(0,0,0,0.2);
+	}
+
+	.prev {
+		position: absolute;
+		top: 45%;
+		left: 7%;
+		font-size: 12px;
+		line-height: 24px;
+		text-align: center;
+		padding: .5em 1em;
+		height: 23px;
+		overflow: hidden;
+	}
+
+	.next {
+		position: absolute;
+		top: 45%;
+		right: 7%;
+		font-size: 12px;
+		line-height: 24px;
+		text-align: center;
+		padding: .5em 1em;
+		height: 23px;
+		overflow: hidden;
+		transform: translateX(50%);
+	}
+}
+
+.lb-overlay:target {
+	width: auto;
+	height: auto;
+	bottom: 0px;
+	right: 0px;
+	padding: 80px 10% 120px 10%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	img {
+		animation: fadeInScale 1.2s ease-in-out;
+	}
+
+	a.lb-close,
+	a.prev,
+	a.next {
+		opacity: 1;
+		filter: alpha(opacity=99); /* internet explorer */
+		-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(opacity=99)"; /*IE8*/
+	}
+}
+
+@keyframes fadeInScale {
+  0% { transform: scale(0.6); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/*
+	100% Height for Opera as the max-height seems to be ignored, not optimal for large screens
+	http://bricss.net/post/11230266445/css-hack-to-target-opera
+*/
+x:-o-prefocus, .lb-overlay img {
+    height: 100%;
+}

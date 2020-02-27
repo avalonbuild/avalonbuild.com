@@ -49,11 +49,11 @@
 							<figure>
 								@if (gallery.Images.Count > 0)
 								{
-									<img src="/file/@gallery.Images[0].ThumbnailFileName" alt="@gallery.Title">
+									<img src="/file/@gallery.Images[0].ThumbnailFileName" alt="@gallery.Title" loading="lazy"/>
 								}
 								else
 								{
-									<img src="/images/galleries/default.jpg" alt="@gallery.Title">
+									<img src="/images/galleries/default.jpg" alt="@gallery.Title" loading="lazy"/>
 								}
 								<figcaption>
 									<h3>@gallery.Title</h3>

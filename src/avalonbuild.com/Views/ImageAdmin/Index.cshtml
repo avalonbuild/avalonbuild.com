@@ -201,7 +201,7 @@
 			function PopulateImage(image, list, prepend)
 			{
 				var li = $('<li>');
-				var img = $('<img src="/file/' + image.thumbnailFileName + '"/>');
+				var img = $('<img src="/file/' + image.thumbnailFileName + '" loading="lazy"/>');
 				var del = $('<a class="delete" title="Delete Image" href="/api/image/' + image.id + '"></a>');
 
 				del.click(function (evt) {

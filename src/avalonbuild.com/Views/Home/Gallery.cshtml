@@ -22,7 +22,55 @@
 			$("body").on("contextmenu", "img", function(e) {
 				return false;
 			});
+
+			$(".prev").on("click", prevClick);
+
+			$(".next").on("click", nextClick);
+
 		});
+
+		function prevClick() {
+
+			var target = event.currentTarget;
+
+			var li = target.parentElement.parentElement;
+
+			var prev = li.previousElementSibling;
+			var last = li.parentElement.lastElementChild;
+
+			if (prev) {
+
+				window.location.href = prev.querySelector("a").href;
+
+			}
+			else {
+
+				window.location.href = last.querySelector("a").href;
+
+			}
+		}
+
+		function nextClick() {
+
+			var target = event.currentTarget;
+
+			var li = target.parentElement.parentElement;
+
+			var next = li.nextElementSibling;
+			var first = li.parentElement.firstElementChild;
+
+			if (next) {
+
+				window.location.href = next.querySelector("a").href;
+
+			}
+			else {
+
+				window.location.href = first.querySelector("a").href;
+
+			}
+
+		}		
 
 	</script>
 }
@@ -48,14 +96,17 @@
 						<a href="#@image.Name">
 
 							<figure>
-								<img src="/file/@image.ThumbnailFileName" alt="@image.Title">
+								<img src="/file/@image.ThumbnailFileName" alt="@image.Title" loading="lazy"/>
 							</figure>
 
 						</a>
 
 						<div class="lb-overlay" id="@image.Name">
-							<a href="#gallery-@image.Name" class="lb-close">&times; CLOSE</a>
-							<img src="/file/@image.FileName" alt="@image.Title" />
+
+							<a class="prev">&lt;&lt;</a>
+							<a class="next">&gt;&gt;</a>
+							<a href="#gallery-@image.Name" class="lb-close">&times;</a>
+							<img src="/file/@image.FileName" alt="@image.Title" loading="lazy"/>
 
 						</div>
 

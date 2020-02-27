@@ -7,9 +7,9 @@ namespace avalonbuild.com.Controllers
     [Authorize]
     public class ImageAdminController : Controller
     {
-        private IHostingEnvironment _env;
+        private IWebHostEnvironment _env;
 
-        public ImageAdminController(IHostingEnvironment env)
+        public ImageAdminController(IWebHostEnvironment env)
         {
             _env = env;
         }

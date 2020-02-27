@@ -1,0 +1,263 @@
+﻿@{
+    ViewBag.Title = "Available Homes";
+	ViewBag.Description = "Available Homes";
+}
+
+@section Styles {
+	<link rel="stylesheet" href="~/css/pages/available-homes.css">
+}
+
+@section Scripts {
+
+	<script>
+
+		$(function () {
+
+			$(".prev").on("click", prevClick);
+
+			$(".next").on("click", nextClick);
+
+		});
+
+		function prevClick() {
+
+			var target = event.currentTarget;
+
+			var li = target.parentElement.parentElement;
+
+			var prev = li.previousElementSibling;
+			var last = li.parentElement.lastElementChild;
+
+			if (prev) {
+
+				window.location.href = prev.querySelector("a").href;
+
+			}
+			else {
+
+				window.location.href = last.querySelector("a").href;
+
+			}
+		}
+
+		function nextClick() {
+
+			var target = event.currentTarget;
+
+			var li = target.parentElement.parentElement;
+
+			var next = li.nextElementSibling;
+			var first = li.parentElement.firstElementChild;
+
+			if (next) {
+
+				window.location.href = next.querySelector("a").href;
+
+			}
+			else {
+
+				window.location.href = first.querySelector("a").href;
+
+			}
+
+		}		
+
+	</script>
+}
+
+<section id="available-homes">
+
+	<header>
+
+		<h2>@ViewBag.Title</h2>
+
+	</header>
+
+</section>
+
+<section id="property-summary">
+
+	<header>
+	
+		<h3>
+			<div id="introducing">Introducing</div>
+			<div id="title">The Vanguard</div>
+			<div id="tagline">The Best of Village Living</div>
+			<address>214 Tower Road, Barrington, IL</address>
+		</h3>
+
+	</header>
+
+	<p>
+		This new construction home exemplifies a passion for creating artisan homes. This village-chic home features on-trend design, incorporating high-end fixtures and finishes for today's family lifestyles.
+	</p>
+
+	<p id="available-time">
+		Available Spring 2020
+	</p>
+
+</section>
+
+
+<section id="property-render">
+
+	<img src="~/images/available-homes/214 Tower Rendering with Avalon Logo.jpg" loading="lazy"/>
+
+</section>
+
+
+<section id="gallery">
+
+	<div class="container">
+
+		<header>
+
+			<h2>Gallery</h2>
+
+		</header>
+
+		<ul>
+
+			<li id="gallery-image-1">
+
+				<a href="#image-1">
+
+					<figure>
+						<img src="~/images/available-homes/214 Tower Kitchen Board.jpg" alt="Kitchen" loading="lazy"/>
+					</figure>
+
+				</a>
+
+				<div class="lb-overlay" id="image-1">
+
+					<a class="prev">&lt;&lt;</a>
+					<a class="next">&gt;&gt;</a>
+					<a href="#gallery-image-1" class="lb-close">&times;</a>
+					<img src="~/images/available-homes/214 Tower Kitchen Board.jpg" alt="Kitchen" loading="lazy"/>
+
+				</div>
+
+			</li>
+
+			<li id="gallery-image-2">
+
+				<a href="#image-2">
+
+					<figure>
+						<img src="~/images/available-homes/214 Tower Master Bathroom Board.jpg" alt="Master Bedroom" loading="lazy"/>
+					</figure>
+
+				</a>
+
+				<div class="lb-overlay" id="image-2">
+
+					<a class="prev">&lt;&lt;</a>
+					<a class="next">&gt;&gt;</a>
+					<a href="#gallery-image-2" class="lb-close">&times;</a>
+					<img src="~/images/available-homes/214 Tower Master Bathroom Board.jpg" alt="Master Bedroom" loading="lazy"/>
+
+				</div>
+
+			</li>
+
+			<li id="gallery-image-3">
+
+				<a href="#image-3">
+
+					<figure>
+						<img src="~/images/available-homes/214 Tower Master Bathroom Board.jpg" alt="Mudroom" loading="lazy"/>
+					</figure>
+
+				</a>
+
+				<div class="lb-overlay" id="image-3">
+
+					<a href="#gallery-image-3" class="lb-close">&times;</a>
+					<img src="~/images/available-homes/214 Tower Mudroom Board.jpg" alt="Mudroom" loading="lazy"/>
+					<a class="prev">&lt;&lt;</a>
+					<a class="next">&gt;&gt;</a>
+
+				</div>
+
+			</li>
+
+		</ul>
+
+		<p>
+			<a class="button" href="/#contact">Contact Us To See More</a>
+		</p>
+
+	</div>
+
+</section>
+
+<section id="details">
+
+	<div class="container">
+
+		<header>
+
+			<h2>Features</h2>
+
+		</header>
+
+		<ul>
+			<li> English basement with large windows drenched in natural light </li>
+			<li> 2 plus (one tandem) car attached, heated garage </li>
+			<li> Fully insulated garage and garage doors </li>
+			<li> 4 bedrooms (with option for 5th in lower level) </li>
+			<li> 3 full bathrooms (4th in finished lower level) </li>
+			<li> 1 powder room </li>
+			<li> Over 3600 square feet with optional additional 840 in lower level and 380 in mechanical and storage area </li>
+			<li> 9’ ceilings, with vaults and ceiling treatments </li>
+			<li> 8’10” basement foundation walls </li>
+			<li> 2x6 framing  </li>
+			<li> 5/8” drywall throughout with radius/or 45 degree corner beads </li>
+			<li> Custom arched openings and ceiling treatments </li>
+			<li> Casement windows, not builder grade, double hung, divided lite, energy efficient low–e glass </li>
+			<li> Custom wood and glass front entry door </li>
+			<li> True stucco and low maintenance james hardie composite exterior finishes </li>
+			<li> GAF Timberline HD lifetime roofing </li>
+			<li> Two zone heating and cooling with nest/ecobee smart wifi controls </li>
+			<li> Covered rear outdoor living lanai with infared heaters </li>
+			<li> Tongue and groove ceilings at porches  </li>
+			<li> Walk-in closets </li>
+			<li> Truly custom cabinetry throughout  </li>
+			<li> Mudroom with custom storage and family organizaton/drop zone/charging stations </li>
+			<li> Sun drenched 3 story staircase  </li>
+			<li> 1.5 story vaulted dining room with custom beamwork </li>
+			<li> Custom millwork  </li>
+			<li> Custom hardwood and iron baluster staircase and railings from lower level to second floor </li>
+			<li> Gourmet kitchen with top brand name appliances, truly custom cabinetry, and plenty of room for family and entertaining </li>
+			<li> Open concept floor plan (kitchen, great room, and dining areas)  </li>
+			<li> Granite/quartz counter tops throughout </li>
+			<li> Large 2nd floor laundry room </li>
+			<li> Elegant master suite with morning bar and vaulted ceiling </li>
+			<li> Luxurious master bathroom with large walk-in shower, free standing tub, and separate water closet </li>
+			<li> Heated floor in master bath </li>
+			<li> Expansive master walk-in closet with custom closet organizing systems </li>
+			<li> Upgraded and up-sized millwork throughout, not standard builder grade/size </li>
+			<li> Solid core interior doors throughout </li>
+			<li> 42” linear gas fireplace with remote control  </li>
+			<li> Energy efficient construction, products, and materials throughout </li>
+			<li> Higher insulation values = lower energy costs </li>
+			<li> High efficiency dimmable warm white led lighting throughout  </li>
+			<li> USB integrated outlets for conveinance </li>
+			<li> Electric car charging circuit in garage </li>
+			<li> Integrated Sonos audio system </li>
+			<li> Integrated Amazon Echo/Alexa system </li>
+			<li> Wifi enabled systems throughout – control your home via smartphone or tablet </li>
+			<li> Elegant trending style, high-end on-trend interior fixtures and finishes </li>
+			<li> Solid hardwood wide plank white oak wood floors  </li>
+			<li> Porcelain and stone tile with custom accents and inlays </li>
+			<li> Custom tile shower floors, not drop-in fiberglass  </li>
+			<li> Landscaping package with exterior accent lighting </li>
+		</ul>
+
+		<p>
+			<a class="button" href="/#contact">Contact Us For More Details</a>
+		</p>
+
+	</div>
+
+</section>

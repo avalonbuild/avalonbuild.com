@@ -59,6 +59,12 @@ namespace avalonbuild.com.Controllers
             return View();
         }
 
+        [Route("/available-homes")]
+        public IActionResult AvailableHomes()
+        {
+            return View();
+        }
+
         private ViewModels.Gallery GalleryModelToViewModel(Models.Gallery gallery)
         {
                 var modelGallery = new ViewModels.Gallery {

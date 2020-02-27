@@ -1,21 +1,24 @@
 /// <binding Clean='clean' />
-"use strict";
 
-var gulp = require("gulp"),
-    rimraf = require("rimraf"),
-    concat = require("gulp-concat"),
-    cssmin = require("gulp-cssmin"),
-    sass = require('gulp-sass'),
-    sourcemaps = require('gulp-sourcemaps'),
-    prefix = require('gulp-autoprefixer'),
-    uglify = require("gulp-uglify");
+const { src, dest, watch, series, parallel } = require('gulp');
+
+const sourcemaps = require('gulp-sourcemaps');
+const sass = require('gulp-sass');
+const postcss = require('gulp-postcss');
+const autoprefixer = require('autoprefixer');
+const cssnano = require('cssnano');
+const del = require('del');
 
 var webroot = "./wwwroot/";
 
 var paths = {
     css: webroot + "css/",
-    sass: webroot + "sass/",
+    sass: webroot + "sass/"
 };
+
+var files = {
+    scss: paths.sass + '**/*.scss'
+}
 
 var options = {
     sass: {
@@ -26,29 +29,53 @@ var options = {
         error: function (err) {
             console.error('Error!', err.message);
         }
-    },
+    }
 };
 
-gulp.task("clean:css", function (cb) {
-    rimraf(paths.css, cb);
-});
+function cleanTask () {
 
-gulp.task("clean", ["clean:css"]);
+    return del(
+        [
+            paths.css
+        ]
+    );
 
-gulp.task('build:sass', ['clean:css'], function () {
-	return gulp.src(paths.sass + "**/*.scss")
-		.pipe(sourcemaps.init())
-		.pipe(sass(options.sass.parameters).on('error', options.sass.error))
-		//.pipe(prefix())
-        .pipe(cssmin())
-		.pipe(sourcemaps.write())
-		.pipe(gulp.dest(paths.css));
-});
+}
 
-gulp.task('build', ['build:sass'], function () {});
+function scssTask () {    
 
-gulp.task('watch', function () {
-    gulp.watch(paths.sass + "**/*.scss", ['build:sass']);
-});
+    return src(files.scss)
+        .pipe(sourcemaps.init())
+        .pipe(sass(options.sass.parameters).on('error', options.sass.error))
+        .pipe(postcss([ autoprefixer(), cssnano() ]))
+        .pipe(sourcemaps.write('.'))
+        .pipe(dest(paths.css)
+    );
 
+}
+
+function watchTask () {
+
+    watch(
+        [files.scss],
+        {interval: 1000, usePolling: true}, //Makes docker work
+        series(
+            scssTask
+        )
+    );    
+
+}
+
+exports.clean = cleanTask;
+
+exports.build = series(
+    cleanTask,
+    scssTask
+);
+
+exports.default = series(
+    cleanTask,
+    scssTask,
+    watchTask
+);
 

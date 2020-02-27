@@ -10,11 +10,11 @@ namespace avalonbuild.com.Controllers
     public class FileController : Controller
     {
         private readonly FileDbContext _files;
-        private IHostingEnvironment _env;
+        private IWebHostEnvironment _env;
         private readonly ILogger _logger;
 
         public FileController(FileDbContext files,
-            IHostingEnvironment env,
+            IWebHostEnvironment env,
             ILoggerFactory loggerFactory)
         {
             _files = files;

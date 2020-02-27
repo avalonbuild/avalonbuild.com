@@ -13,7 +13,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using avalonbuild.com.Data;
 using avalonbuild.com.Models;
-using ImageSharp;
+
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
+using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.Primitives;
 
 namespace avalonbuild.com.Controllers.Api
@@ -139,7 +142,7 @@ namespace avalonbuild.com.Controllers.Api
             };
 
             try {
-                using (var resizedImage = ImageSharp.Image.Load(FileStream.ToArray()))
+                using (var resizedImage = SixLabors.ImageSharp.Image.Load(FileStream.ToArray()))
                 {
                     using (var resizeStream = new MemoryStream()) {
 
@@ -150,7 +153,10 @@ namespace avalonbuild.com.Controllers.Api
 
                             _logger.LogInformation("Resizing image from " + resizedImage.Width + "x" + resizedImage.Height + " to " + Convert.ToInt32(newWidth) + "x" + Convert.ToInt32(newHeight));
 
-                            resizedImage.Resize(Convert.ToInt32(newWidth), Convert.ToInt32(newHeight)).Save(resizeStream, ImageFormats.Jpeg);
+                            resizedImage.Mutate(c => c.Resize(Convert.ToInt32(newWidth), Convert.ToInt32(newHeight)));
+                            resizedImage.SaveAsJpeg(resizeStream);
+
+                            //resizedImage.Resize(Convert.ToInt32(newWidth), Convert.ToInt32(newHeight)).Save(resizeStream, ImageFormats.Jpeg);
                         }
                         else
                         {
@@ -159,7 +165,10 @@ namespace avalonbuild.com.Controllers.Api
 
                             _logger.LogInformation("Resizing image from " + resizedImage.Width + "x" + resizedImage.Height + " to " + Convert.ToInt32(newWidth) + "x" + Convert.ToInt32(newHeight));
 
-                            resizedImage.Resize(Convert.ToInt32(newWidth), Convert.ToInt32(newHeight)).Save(resizeStream, ImageFormats.Jpeg);
+                            resizedImage.Mutate(c => c.Resize(Convert.ToInt32(newWidth), Convert.ToInt32(newHeight)));
+                            resizedImage.SaveAsJpeg(resizeStream);
+
+                            //resizedImage.Resize(Convert.ToInt32(newWidth), Convert.ToInt32(newHeight)).Save(resizeStream, ImageFormats.Jpeg);
                         }
 
                         file.Data = resizeStream.ToArray();
@@ -188,7 +197,7 @@ namespace avalonbuild.com.Controllers.Api
             };
 
             try {
-                using (var resizedImage = ImageSharp.Image.Load(FileStream.ToArray()))
+                using (var resizedImage = SixLabors.ImageSharp.Image.Load(FileStream.ToArray()))
                 {
                     using (var resizeStream = new MemoryStream()) {
 
@@ -211,8 +220,11 @@ namespace avalonbuild.com.Controllers.Api
 
                             _logger.LogInformation("Creating thumbnail from original image (" + resizedImage.Width + "x" + resizedImage.Height + "), sizing to " + Convert.ToInt32(newWidth) + "x" + Convert.ToInt32(newHeight) + " then cropping to " + thumbWidth + "x" + thumbHeight);
 
-                            //resizedImage.Resize(Convert.ToInt32(newWidth), Convert.ToInt32(newHeight)).Crop(thumbWidth, thumbHeight).Save(resizeStream, ImageFormats.Jpeg);
-                            resizedImage.Resize(Convert.ToInt32(newWidth), Convert.ToInt32(newHeight)).Crop(cropArea).Save(resizeStream, ImageFormats.Jpeg);
+                            resizedImage.Mutate(c => c.Resize(Convert.ToInt32(newWidth), Convert.ToInt32(newHeight)));
+                            resizedImage.Mutate(c => c.Crop(cropArea));
+                            resizedImage.SaveAsJpeg(resizeStream);
+
+                            //resizedImage.Resize(Convert.ToInt32(newWidth), Convert.ToInt32(newHeight)).Crop(cropArea).Save(resizeStream, ImageFormats.Jpeg);
                         }
                         else
                         {
@@ -226,8 +238,11 @@ namespace avalonbuild.com.Controllers.Api
 
                             _logger.LogInformation("Creating thumbnail from original image (" + resizedImage.Width + "x" + resizedImage.Height + "), sizing to " + Convert.ToInt32(newWidth) + "x" + Convert.ToInt32(newHeight) + " then cropping to " + thumbWidth + "x" + thumbHeight);
 
-                            //resizedImage.Resize(Convert.ToInt32(newWidth), Convert.ToInt32(newHeight)).Crop(thumbWidth, thumbHeight).Save(resizeStream, ImageFormats.Jpeg);
-                            resizedImage.Resize(Convert.ToInt32(newWidth), Convert.ToInt32(newHeight)).Crop(cropArea).Save(resizeStream, ImageFormats.Jpeg);
+                            resizedImage.Mutate(c => c.Resize(Convert.ToInt32(newWidth), Convert.ToInt32(newHeight)));
+                            resizedImage.Mutate(c => c.Crop(cropArea));
+                            resizedImage.SaveAsJpeg(resizeStream);
+
+                            //resizedImage.Resize(Convert.ToInt32(newWidth), Convert.ToInt32(newHeight)).Crop(cropArea).Save(resizeStream, ImageFormats.Jpeg);
                         }
 
                         file.Data = resizeStream.ToArray();

@@ -25,6 +25,7 @@
 		clear: both;
 		border-radius: .25em;
 		background: rgba(255,255,255,0.97);
+		//background: #15152b;
 		box-shadow: 0 1px 20px rgba(0,0,0,0.20);
 		opacity: 0;
 		transition: all 0.25s;
@@ -57,7 +58,7 @@
 
 	li {
 		position: relative;
-		border-top: 1px solid rgba(0,0,0,0.03);
+		border-top: 1px solid rgba(0,0,0,0.02);
 
 		&:first-child {
 			border-top-color: transparent;
@@ -68,10 +69,10 @@
 			display: block;
 			padding: 0 2em;
 			line-height: 2.5em;
-			color: #bbb;
+			color: #15152b;
 
 			&:hover {
-				color: #444;
+				color: #fbb03b;
 			}
 		}
 	}

@@ -117,7 +117,7 @@
 				var img;
 
 				if (gallery.images.length > 0)
-					img = $('<img src="/file/' + gallery.images[0].thumbnailFileName + '"/>');
+					img = $('<img src="/file/' + gallery.images[0].thumbnailFileName + '" loading="lazy"/>');
 				else
 					img = $('<img src="/images/galleries/default.jpg"/>');
 
@@ -149,7 +149,7 @@
 					$.each(data, function(i, field){
 
 						var li = $('<li data-image-id="' + field.id + '">');
-						var img = $('<img src="/file/' + field.thumbnailFileName + '"/>');
+						var img = $('<img src="/file/' + field.thumbnailFileName + '" loading="lazy"/>');
 
 						li.click(function (evt) {
 
