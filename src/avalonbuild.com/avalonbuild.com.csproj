@@ -27,11 +27,13 @@
     <PackageReference Include="SixLabors.ImageSharp.Web" Version="1.0.0-beta0009" />
   </ItemGroup>
 
+<!--
   <Target Name="PrepublishScript" BeforeTargets="PrepareForPublish">
     <Exec Command="npm install" />
     <Exec Command="bower install" />
     <Exec Command="gulp build" />
   </Target>
+-->
 
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.DotNet.Watcher.Tools" Version="2.0.2" />
