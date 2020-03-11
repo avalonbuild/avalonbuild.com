@@ -256,6 +256,19 @@
 
 #services {
 
+	h2 {
+		font-family: 'Cinzel Decorative', Arial;
+		font-size: 1.75em;
+	
+		@include breakpoint(medium) {
+            font-size: 2.25em;
+		}
+		
+		span {
+			display: block;
+		}
+	}
+
 	ul {
 		list-style: none;
 		margin: 0;
@@ -334,23 +347,44 @@
 
 @keyframes gallerycarousel {
 	0% {
-		background-image: url("/images/gallery/c6.jpg");
+		background-image: url("/images/gallery/214 Tower Rendering.jpg");
 	}
-	20% {
-		background-image: url("/images/gallery/b55.jpg");
+	16% {
+		background-image: url("/images/gallery/206 Tower Angle Front For N2 Print Ad 2.jpg");
 	}
-	40% {
-		background-image: url("/images/gallery/b38.jpg");
+	32% {
+		background-image: url("/images/gallery/Dining reduced.jpg");
 	}
-	60% {
-		background-image: url("/images/gallery/b47.jpg");
+	48% {
+		background-image: url("/images/gallery/avalon 3_-22.jpg");
+	}
+	64% {
+		background-image: url("/images/gallery/avalon 3_-13.jpg");
 	}
 	80% {
-		background-image: url("/images/gallery/b25-1.jpg");
+		background-image: url("/images/gallery/_DSF6212.jpg");
 	}
 	100% {
-		background-image: url("/images/gallery/c6.jpg");
+		background-image: url("/images/gallery/214 Tower Rendering.jpg");
 	}
+	// 0% {
+	// 	background-image: url("/images/gallery/c6.jpg");
+	// }
+	// 20% {
+	// 	background-image: url("/images/gallery/b55.jpg");
+	// }
+	// 40% {
+	// 	background-image: url("/images/gallery/b38.jpg");
+	// }
+	// 60% {
+	// 	background-image: url("/images/gallery/b47.jpg");
+	// }
+	// 80% {
+	// 	background-image: url("/images/gallery/b25-1.jpg");
+	// }
+	// 100% {
+	// 	background-image: url("/images/gallery/c6.jpg");
+	// }
 }
 
 //

@@ -12,7 +12,7 @@ Website for Avalon Development & Construction Inc.
 6.  Run `dotnet ef database update -c ApplicationDbContext` to create the application db tables
 7.  Run `dotnet ef database update -c FilebContext` to create the file db tables
 8.  Run `dotnet ef database update -c ImageDbContext` to create the image db tables
-9.  Run `dotnet run environment=development` to run the application in development mode
+9.  Run `dotnet watch run environment=development --urls http://0.0.0.0:5000` to run the application in development mode, bind it to all local IPs so it can be accessed externally, and reload when changes happen
 10. Navigate to `localhost:5000` in your browser to view the app
 11. Navigate to `localhost:5000/register` to register the admin account (after initial create this url will redirect to the homepage)
 12. To build the static content install the following
