@@ -34,20 +34,21 @@
 		
 		#introducing {
 			font-size: .6em;
-			opacity: .4;
+			opacity: .7;
 		}
 
 		#title {
 			font-size: 1.25em;
-			font-family: 'Cinzel Decorative', Arial;
+			//font-family: 'Cinzel', Arial;
 			opacity: 1;
-			margin-top: .1em;
+			margin-top: -.1em;
 			margin-bottom: -.1em;
+			letter-spacing: -1px;
 		}
 
 		#tagline {
 			font-size: .65em;
-			opacity: .4;
+			opacity: .7;
 		}
 
 		address {
@@ -55,7 +56,7 @@
 			margin-top: .5em;
 			font-size: .45em;
 			font-style: normal;
-			opacity: .3;
+			opacity: .5;
 		}
 	}
 

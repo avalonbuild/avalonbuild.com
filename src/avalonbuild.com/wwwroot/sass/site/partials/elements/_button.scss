@@ -12,8 +12,9 @@
     border-radius: .25em;
     outline: none;
     box-shadow: none;
-	font-size: 1.125em;
-    font-weight: 500;
+    font-size: 1.125em;
+    font-family: $button-font-family;
+    font-weight: $button-font-weight;
     text-shadow: none;
 	transition: all, .1s;
     user-select: none;

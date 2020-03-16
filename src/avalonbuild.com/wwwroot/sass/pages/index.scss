@@ -257,10 +257,10 @@
 #services {
 
 	h2 {
-		font-family: 'Cinzel Decorative', Arial;
+		font-family: 'Cinzel', Arial;
 		font-size: 1.75em;
-	
-		@include breakpoint(medium) {
+		letter-spacing: -1px;
+		@include breakpoint(extra-large) {
             font-size: 2.25em;
 		}
 		
