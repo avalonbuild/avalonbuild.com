@@ -20,11 +20,18 @@ function preloader() {
 		var img2 = new Image();
 		var img3 = new Image();
         var img4 = new Image();
+        var img5 = new Image();
 
-		img1.src = "/images/gallery/b55.jpg";
-		img2.src = "/images/gallery/b38.jpg";
-		img3.src = "/images/gallery/b47.jpg";
-        img4.src = "/images/gallery/b25-1.jpg";
+		// img1.src = "/images/gallery/b55.jpg";
+		// img2.src = "/images/gallery/b38.jpg";
+		// img3.src = "/images/gallery/b47.jpg";
+        // img4.src = "/images/gallery/b25-1.jpg";
+
+		img1.src = "/images/gallery/206 Tower Angle Front For N2 Print Ad 2.jpg";
+		img2.src = "/images/gallery/Dining reduced.jpg";
+		img3.src = "/images/gallery/avalon 3_-22.jpg";
+        img4.src = "/images/gallery/avalon 3_-13.jpg";
+        img5.src = "/images/gallery/_DSF6212.jpg";
 
 	}
 }
