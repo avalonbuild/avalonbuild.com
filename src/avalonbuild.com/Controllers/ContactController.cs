@@ -34,9 +34,10 @@ namespace avalonbuild.com.Controllers
                 var emailSubj = _settings.contactsubject;
 
 				var message = new MimeMessage ();
-				message.From.Add (new MailboxAddress (model.Name, model.Email));
+				message.From.Add (new MailboxAddress ("Contact Form", destEmail));
 				message.To.Add (new MailboxAddress ("Contact Form", destEmail));
-				message.Subject = emailSubj + " [Phone: " + model.Phone + "]";
+				message.ReplyTo.Add(new MailboxAddress (model.Name, model.Email));
+				message.Subject = emailSubj + " - " + model.Name + " [Email: " + model.Email + " / Phone: " + model.Phone + "]";
 
 				message.Body = new TextPart ("plain")
 				{
