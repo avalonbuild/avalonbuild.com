@@ -49,8 +49,9 @@
 			overflow: hidden;
 
 			img {
-				display: block;
+				display: flex;
 				transition: all 3s;
+				height: auto;
 			}
 
 			p {
