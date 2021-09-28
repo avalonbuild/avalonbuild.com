@@ -77,12 +77,12 @@
 //
 
 .lb-overlay{
-	width: 0px;
-	height: 0px;
+	width: 0;
+	height: 0;
 	position: fixed;
 	overflow: hidden;
-	left: 0px;
-	top: 0px;
+	left: 0;
+	top: 0;
 	padding: 0px;
 	z-index: 99;
 	text-align: center;
@@ -95,8 +95,8 @@
 		-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(opacity=0)"; /*IE8*/
 		box-shadow: 0px 1px 2px rgba(0,0,0,0.3);
 		border-radius: 50%;
-		opacity: 0;
-		transition: opacity 0.3s linear 1.2s;
+		/*opacity: 0;
+		transition: opacity 0.3s linear 1.2s;*/
 		transform: translateX(-50%);
 		cursor: pointer;
 		z-index: 1001;
@@ -107,9 +107,9 @@
 		}
 	}
 
-	a.lb-close{
+	a.lb-close {
 		position: absolute;
-		top: 30px;
+		top: 8px;
 		left: 50%;
 		height: 24px;
 		width: 24px;
@@ -124,17 +124,19 @@
 
 	img{
 		/* height: 100%; For Opera max-height does not seem to work */
-		max-height: 100%;
+		display: block;
 		position: relative;
-		-webkit-box-shadow: 1px 1px 4px rgba(0,0,0,0.3);
-		-moz-box-shadow: 1px 1px 4px rgba(0,0,0,0.3);
 		box-shadow: 0px 2px 7px rgba(0,0,0,0.2);
+
+		max-height: 100%;
+		max-width: 100%;
 	}
+
 
 	.prev {
 		position: absolute;
 		top: 45%;
-		left: 7%;
+		left: 54px;
 		font-size: 12px;
 		line-height: 24px;
 		text-align: center;
@@ -146,7 +148,7 @@
 	.next {
 		position: absolute;
 		top: 45%;
-		right: 7%;
+		right: 54px;
 		font-size: 12px;
 		line-height: 24px;
 		text-align: center;
@@ -154,15 +156,26 @@
 		height: 23px;
 		overflow: hidden;
 		transform: translateX(50%);
+		transition: .25s all ease;
 	}
+
+	@media (orientation: portrait) {
+		.prev {
+			left: 24px;
+		}
+		.next {
+			right: 24px;
+		}
+	}
+
 }
 
 .lb-overlay:target {
 	width: auto;
 	height: auto;
-	bottom: 0px;
-	right: 0px;
-	padding: 80px 10% 120px 10%;
+	bottom: 0;
+	right: 0;
+	padding: 50px 7% 50px 7%;
 	display: flex;
 	justify-content: center;
 	align-items: center;

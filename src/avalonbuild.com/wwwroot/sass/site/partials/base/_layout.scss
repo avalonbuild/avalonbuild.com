@@ -8,6 +8,11 @@
 // Body
 //
 
+html, body {
+	height: 100vh;
+	// width: 100vw;
+}
+
 body {
 	position: relative;
 	background-color: #fff;
