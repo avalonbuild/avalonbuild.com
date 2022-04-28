@@ -77,13 +77,14 @@
 //
 
 .lb-overlay{
+	display: none;
 	width: 0;
 	height: 0;
 	position: fixed;
 	overflow: hidden;
 	left: 0;
 	top: 0;
-	padding: 0px;
+	padding: 0;
 	z-index: 99;
 	text-align: center;
 	background: rgba(55, 58, 71, 0.9);
