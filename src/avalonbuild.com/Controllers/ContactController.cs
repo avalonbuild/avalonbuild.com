@@ -1,4 +1,5 @@
 using System;
+using System.Security.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MailKit.Net.Smtp;
@@ -46,6 +47,21 @@ namespace avalonbuild.com.Controllers
 
 				using (var client = new SmtpClient ())
 				{
+
+					//
+					// Log the default protocols
+					Console.WriteLine ("Default MailKit client.SslProtocols = {0}", client.SslProtocols);
+
+					//
+					// Force TLS 1.2, default was TLS 1.0
+					client.SslProtocols = SslProtocols.Tls12;
+
+					//
+					// Log the override protocols after setting them
+					Console.WriteLine ("Override MailKit client.SslProtocols = {0}", client.SslProtocols);
+
+					//
+					// Connect to the stmp host/port
 					client.Connect (smtpHost, smtpPort, false);
 
 					// Note: since we don't have an OAuth2 token, disable
@@ -57,6 +73,7 @@ namespace avalonbuild.com.Controllers
 
 					client.Send (message);
 					client.Disconnect (true);
+
 				}
 
 				return Content("Message has been sent successfully");
