@@ -4,11 +4,11 @@ Website for Avalon Development & Construction Inc.
 
 ## To set up a development environment:
 
-1.  Install the dotnet core sdk
+1.  Install the dotnet core sdk (version 3.03, https://dotnet.microsoft.com/en-us/download/dotnet/3.0)
 2.  Clone this github repo
 3.  Navigate to the avalonbuild.com\src\avalonbuild.com folder
 4.  Run `dotnet restore` to install dependencies
-5.  Run `dotnet tool install --global dotnet-ef`
+5.  Run `dotnet tool install dotnet-ef --version 3.0.3 --global`
 6.  Run `dotnet ef database update -c ApplicationDbContext` to create the application db tables
 7.  Run `dotnet ef database update -c FileDbContext` to create the file db tables
 8.  Run `dotnet ef database update -c ImageDbContext` to create the image db tables
