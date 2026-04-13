@@ -3,7 +3,7 @@
 const { src, dest, watch, series, parallel } = require('gulp');
 
 const sourcemaps = require('gulp-sourcemaps');
-const sass = require('gulp-sass')(require('node-sass'));
+const sass = require("gulp-sass")(require("sass"));  // no Python build needed
 const postcss = require('gulp-postcss');
 const autoprefixer = require('autoprefixer');
 const cssnano = require('cssnano');
@@ -23,8 +23,10 @@ var files = {
 var options = {
     sass: {
         parameters: {
+            // outputStyle: "expanded",
+			// includePaths: ["wwwroot/lib/", "wwwroot/sass/"]
             outputStyle: "expanded",
-			includePaths: ["wwwroot/lib/", "wwwroot/sass/"]
+            loadPaths: [paths.sass, webroot + "lib/"]
         },
         error: function (err) {
             console.error('Error!', err.message);
